@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // Views
-import 'package:largo/views/walking.dart';
+import 'package:largo/views/walkingSetting.dart';
+import 'package:largo/views/walkingView.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
             case 2:
               return WalkingView();
             default:
-              return WalkingView();
+              return WalkingSettingView();
           }
         });
   }

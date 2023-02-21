@@ -4,16 +4,18 @@ import 'package:flutter/cupertino.dart';
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
 import 'package:largo/widgets/customSlider.dart';
+import 'package:largo/widgets/customButton.dart';
+import 'package:largo/widgets/smallTitle.dart';
 
 // Colors
 import 'package:largo/color/themeColors.dart';
 
-class WalkingView extends StatefulWidget {
+class WalkingSettingView extends StatefulWidget {
   @override
-  _WalkingView createState() => _WalkingView();
+  _WalkingSettingView createState() => _WalkingSettingView();
 }
 
-class _WalkingView extends State<WalkingView> {
+class _WalkingSettingView extends State<WalkingSettingView> {
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -29,6 +31,7 @@ class _WalkingView extends State<WalkingView> {
         appBar: CustomAppBar("걸어볼까?"),
         body: SingleChildScrollView(
             child: Container(
+                color: backgroundColor,
                 height: 700,
                 child: Column(
                   children: [
@@ -74,29 +77,7 @@ class _WalkingView extends State<WalkingView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 20, bottom: 10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Respond to button press
-                                print("walking start");
-                              },
-                              child: Text(
-                                '걷기시작',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: greyScale4),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(20), // <-- Radius
-                                ),
-                                backgroundColor: buttonColor,
-                                minimumSize: const Size.fromHeight(60), // NEW
-                              ),
-                            ),
-                          ),
+                          CustomButton("걷기 시작")
                         ],
                       ),
                     )
