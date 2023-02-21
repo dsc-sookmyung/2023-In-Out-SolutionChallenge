@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // Views
-import 'package:largo/views/walkingSetting.dart';
+import 'package:largo/views/walkingSettingView.dart';
 import 'package:largo/views/walkingView.dart';
 import 'package:largo/views/walkingDoneView.dart';
 
