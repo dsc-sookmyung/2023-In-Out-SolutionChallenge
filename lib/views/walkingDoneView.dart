@@ -19,7 +19,7 @@ class _WalkingDoneView extends State<WalkingDoneView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar("걸어 완료!"),
+        appBar: CustomAppBar("걷기 완료!"),
         body: SingleChildScrollView(
             child: Container(
                 color: backgroundColor,
