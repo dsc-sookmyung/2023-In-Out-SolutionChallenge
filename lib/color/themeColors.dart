@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 final mainColor = Color(0xFFFFC977);
 final buttonColor = Color(0xFFFFD390);
 final highlightColor = Color(0xFFF8A426);
+final highlightColor2 = Color(0xFF77BEFF);
 
 final backgroundColor = Color(0xFFF5F5F5);
 // Grey

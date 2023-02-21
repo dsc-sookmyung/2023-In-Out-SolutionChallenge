@@ -19,7 +19,7 @@ class _WalkingView extends State<WalkingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar("걸어보자!"),
+        appBar: CustomAppBar("걸어 보자!"),
         body: SingleChildScrollView(
             child: Container(
                 color: backgroundColor,

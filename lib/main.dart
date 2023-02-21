@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 // Views
 import 'package:largo/views/walkingSetting.dart';
 import 'package:largo/views/walkingView.dart';
+import 'package:largo/views/walkingDoneView.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,8 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
         tabBar: CupertinoTabBar(items: items),
         tabBuilder: (context, index) {
           switch (index) {
-            case 2:
+            case 0:
+              return WalkingSettingView();
+            case 1:
               return WalkingView();
+            case 2:
+              return WalkingDoneView();
             default:
               return WalkingSettingView();
           }

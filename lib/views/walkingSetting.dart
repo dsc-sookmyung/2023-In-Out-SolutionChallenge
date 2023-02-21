@@ -28,7 +28,7 @@ class _WalkingSettingView extends State<WalkingSettingView> {
 
     // TODO: implement build
     return Scaffold(
-        appBar: CustomAppBar("걸어볼까?"),
+        appBar: CustomAppBar("걸어 볼까?"),
         body: SingleChildScrollView(
             child: Container(
                 color: backgroundColor,
