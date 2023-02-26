@@ -28,61 +28,64 @@ class _WalkingSettingView extends State<WalkingSettingView> {
     double _innerImageWidth = _cardWidth * 0.95;
 
     // TODO: implement build
-    return Scaffold(
-        appBar: CustomAppBar("걸어 볼까?"),
-        body: SingleChildScrollView(
-            child: Container(
-                color: backgroundColor,
-                height: 700,
-                child: Column(
-                  children: [
-                    Container(
-                        child: Center(
-                          child: Text("Maps 예정"),
-                        ),
-                        color: mainColor,
-                        height: 400,
-                        margin: const EdgeInsets.all(8.0)),
-                    Container(
-                      width: 350,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 50,
+    return SafeArea(
+        minimum: EdgeInsets.only(top: 40),
+        child: Scaffold(
+            appBar: CustomAppBar("걸어 볼까?"),
+          body:SingleChildScrollView(
+              child: Container(
+                  color: backgroundColor,
+                  height: 700,
+                  child: Column(
+                    children: [
+                      Container(
+                          child: Center(
+                            child: Text("Maps 예정"),
                           ),
-                          Container(
-                            width: 350,
-                            child: Text(
-                              "장소 검색 거리 반경",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: greyScale5,
-                              ),
-                              textAlign: TextAlign.left,
+                          color: mainColor,
+                          height: 400,
+                          margin: const EdgeInsets.all(8.0)),
+                      Container(
+                        width: 350,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 50,
                             ),
-                          ),
-                          CustomSlider(),
-                          Container(
-                            width: 325,
-                            child: Row(
-                              children: [
-                                Text(
-                                  "10m",
-                                  style: TextStyle(color: greyScale2),
+                            Container(
+                              width: 350,
+                              child: Text(
+                                "장소 검색 거리 반경",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: greyScale5,
                                 ),
-                                Text("10Km",
-                                    style: TextStyle(color: greyScale2))
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                textAlign: TextAlign.left,
+                              ),
                             ),
-                          ),
-                          CustomButton("걷기 시작")
-                        ],
-                      ),
-                    )
-                  ],
-                ))));
+                            CustomSlider(),
+                            Container(
+                              width: 325,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "10m",
+                                    style: TextStyle(color: greyScale2),
+                                  ),
+                                  Text("10Km",
+                                      style: TextStyle(color: greyScale2))
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              ),
+                            ),
+                            CustomButton("걷기 시작")
+                          ],
+                        ),
+                      )
+                    ],
+                  ))))
+        );
   }
 }
