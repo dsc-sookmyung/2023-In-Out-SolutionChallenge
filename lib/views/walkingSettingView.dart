@@ -11,12 +11,23 @@ import 'package:largo/widgets/smallTitle.dart';
 // Colors
 import 'package:largo/color/themeColors.dart';
 
+// API
+import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class WalkingSettingView extends StatefulWidget {
   @override
   _WalkingSettingView createState() => _WalkingSettingView();
 }
 
 class _WalkingSettingView extends State<WalkingSettingView> {
+  Completer<GoogleMapController> _controller = Completer();
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.5465, 126.9647),
+    zoom: 17.4746,
+  );
+
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -39,8 +50,12 @@ class _WalkingSettingView extends State<WalkingSettingView> {
                   child: Column(
                     children: [
                       Container(
-                          child: Center(
-                            child: Text("Maps 예정"),
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: _kGooglePlex,
+                            onMapCreated: (GoogleMapController controller) {
+                              _controller.complete(controller);
+                            },
                           ),
                           color: mainColor,
                           height: 400,

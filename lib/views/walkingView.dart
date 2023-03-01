@@ -10,12 +10,34 @@ import 'package:largo/widgets/customButton.dart';
 import 'package:largo/color/themeColors.dart';
 import 'package:largo/widgets/smallTitle.dart';
 
+// API
+import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class WalkingView extends StatefulWidget {
   @override
   _WalkingView createState() => _WalkingView();
 }
 
 class _WalkingView extends State<WalkingView> {
+  Completer<GoogleMapController> _controller = Completer();
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.5465, 126.9647),
+    zoom: 17.4746,
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,8 +51,12 @@ class _WalkingView extends State<WalkingView> {
             child: Column(
               children: [
                 Container(
-                    child: Center(
-                      child: Text("Maps 예정"),
+                    child: GoogleMap(
+                      mapType: MapType.normal,
+                      initialCameraPosition: _kGooglePlex,
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                      },
                     ),
                     color: mainColor,
                     height: 400,

@@ -6,6 +6,12 @@ import 'package:largo/views/walkingSettingView.dart';
 import 'package:largo/views/walkingView.dart';
 import 'package:largo/views/walkingDoneView.dart';
 
+// Permission handler
+import 'package:permission_handler/permission_handler.dart';
+
+// Geo location
+import 'package:geolocator/geolocator.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -39,8 +45,27 @@ class _MyHomePageState extends State<MyHomePage> {
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings))
   ];
 
+  Future<void> requestLocationPermission() async {
+
+    final serviceStatusLocation = await Permission.locationWhenInUse.isGranted ;
+
+    bool isLocation = serviceStatusLocation == ServiceStatus.enabled;
+
+    final status = await Permission.locationWhenInUse.request();
+
+    if (status == PermissionStatus.granted) {
+      print('Permission Granted');
+    } else if (status == PermissionStatus.denied) {
+      print('Permission denied');
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      print('Permission Permanently Denied');
+      await openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    requestLocationPermission();
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(items: items),
         tabBuilder: (context, index) {
