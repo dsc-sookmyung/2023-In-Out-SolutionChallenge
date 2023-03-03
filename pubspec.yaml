@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  carousel_slider: ^4.2.1
+  dropdown_button2: ^2.0.0
   flutter:
     sdk: flutter
 
@@ -57,6 +59,28 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets :
+    - assets/images/example.png
+    - assets/images/example2.png
+    - assets/images/example3.png
+    - assets/images/google.png
+    - assets/images/largo.png
+
+  fonts :
+      - family : notosanskr
+        fonts :
+          - asset : assets/font/notosanskr_light.otf
+            weight : 300
+          - asset : assets/font/notosanskr_regular.otf
+            weight : 400
+          - asset : assets/font/notosanskr_medium.otf
+            weight : 500
+          - asset : assets/font/notosanskr_bold.otf
+            weight : 700
+          #- asset : font/notosanskr_light.otf
+         # - asset : font/notosanskr_medium.otf
+         # - asset : font/notosanskr_regular.otf
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

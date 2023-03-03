@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:largo/screen/screen_home.dart';
+import 'package:largo/screen/screen_login.dart';
 import 'package:largo/widget/bottom_bar.dart';
 
 void main() => runApp(MyApp());
@@ -27,9 +29,9 @@ class _MyappState extends State<MyApp>{
             body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               children : <Widget> [
-                Container(child: Center(child: Text('메인'),),),
-                Container(child: Center(child: Text('걷기'),),),
-                Container(child: Center(child: Text('마이페이지'),),)
+                ScreenHome(),
+                ScreenLogin(),
+                Container(child: Center(child: Text('프로필'),),)
               ],
             ),
             bottomNavigationBar: Bottom(),

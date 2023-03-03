@@ -31,7 +31,7 @@ class Bottom extends StatelessWidget{
               Icons.home,
               size: 18,
             ),
-              child: Text('마이 페이지',
+              child: Text('프로필',
                 style: TextStyle(fontSize: 9),
               ),),
 
