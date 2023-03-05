@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:largo/viewmodel/newLocationViewModel.dart';
 
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
@@ -12,7 +15,15 @@ import 'package:largo/widgets/smallTitle.dart';
 
 // API
 import 'dart:async';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+//model
+import 'package:largo/models/userLocationInfo.dart';
+
+// GPS
+import 'package:largo/service/LocationService.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class WalkingView extends StatefulWidget {
   @override
@@ -21,25 +32,110 @@ class WalkingView extends StatefulWidget {
 
 class _WalkingView extends State<WalkingView> {
   Completer<GoogleMapController> _controller = Completer();
+  final LocationService _positionStream = LocationService();
+  late StreamSubscription sub;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.5465, 126.9647),
-    zoom: 17.4746,
-  );
+  Set<Marker> markers = Set(); //markers for google map
+  var mymarkers = [];
+  var positionList = [];
+  var polylineidx = 1;
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  Set<Polyline> _polylines = Set<Polyline>();
+  PolylinePoints polylinePoints = PolylinePoints();
+  List<LatLng> polylineCoordinates = [];
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  double lat = 37.544986;
+  double long = 126.964370;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    addMarkers();
+    getCurrentLocation();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
+  addMarkers() async {
+    markers = {};
+    markers.add( //repopulate markers
+        Marker(
+            markerId: MarkerId("current_user_position"),
+            position: LatLng(lat, long), //move to new location
+            icon: BitmapDescriptor.defaultMarker
+        )
+    );
+
+    setState(() {
+      //refresh UI
+    });
+  }
+
+  addPolyline() async {
+    setState(() {
+      _polylines.add(
+          Polyline(
+          width: 8,
+          polylineId: PolylineId(polylineidx.toString()),
+          //color: Color.fromARGB(190, 255, 201, 119),
+          color: Color.fromARGB(190, 252, 45, 82),
+          points: polylineCoordinates));
+      polylineidx++;
+    });
+  }
+
+  void getCurrentLocation() async {
+    GoogleMapController googleMapController = await _controller.future;
+
+     sub = _positionStream.controller.stream.listen((pos){
+      lat = pos.latitude;
+      long = pos.longitude;
+      polylineCoordinates.add(LatLng(lat, long));
+
+      print("location saved : ${positionList.length}, ${polylineCoordinates.length} ******************************************");
+
+      googleMapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            zoom: 17.5,
+            target: LatLng(lat, long),
+          ),
+        ),
+      );
+
+      markers = {};
+      markers.add( //repopulate markers
+          Marker(
+              markerId: MarkerId("current_user_position"),
+              position: LatLng(lat, long), //move to new location
+              icon: BitmapDescriptor.defaultMarker
+          )
+      );
+
+      addPolyline();
+      //print("@#$@$#@$@#$@#@#$@#$@#$@ GMCONG2 ______________________________________________________________________");
+      setState(() {
+        print("GPS updated");
+      });
+
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    sub.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       minimum: EdgeInsets.only(top: 40),
         child: Scaffold(
@@ -47,15 +143,22 @@ class _WalkingView extends State<WalkingView> {
     body: SingleChildScrollView(
         child: Container(
             color: backgroundColor,
-            height: 700,
+            height: 650,
             child: Column(
               children: [
                 Container(
                     child: GoogleMap(
-                      mapType: MapType.normal,
-                      initialCameraPosition: _kGooglePlex,
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller.complete(controller);
+                        initialCameraPosition: CameraPosition(
+                        target: LatLng(lat!, long!),
+                        zoom: 17.5,
+                      ),
+                      markers: markers,
+                      polylines: _polylines,
+                      onMapCreated: (mapController) {
+                        setState(() {
+                          addPolyline();
+                          _controller.complete(mapController);
+                        });
                       },
                     ),
                     color: mainColor,

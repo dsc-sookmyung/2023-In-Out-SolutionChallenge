@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final serviceStatusLocation = await Permission.locationWhenInUse.isGranted ;
 
-    bool isLocation = serviceStatusLocation == ServiceStatus.enabled;
+    //bool isLocation = serviceStatusLocation == ServiceStatus.enabled;
 
     final status = await Permission.locationWhenInUse.request();
 

@@ -11,9 +11,18 @@ import 'package:largo/widgets/smallTitle.dart';
 // Colors
 import 'package:largo/color/themeColors.dart';
 
+// Slider Controller
+import 'package:largo/models/sliderController.dart';
+
 // API
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// GPS
+import 'package:geolocator/geolocator.dart';
+
+// Colors
+import 'package:largo/color/themeColors.dart';
 
 class WalkingSettingView extends StatefulWidget {
   @override
@@ -23,10 +32,90 @@ class WalkingSettingView extends StatefulWidget {
 class _WalkingSettingView extends State<WalkingSettingView> {
   Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.5465, 126.9647),
-    zoom: 17.4746,
-  );
+  Set<Marker> markers = Set(); //markers for google map
+
+  var sliderContoller = SliderController(2);
+  List<double> sliderVals = [17.5, 16, 16.3, 14.5, 13, 11];
+  List<String> sliderValIndicators = ["10m", "100m", "500m", "1Km", "5Km", "10Km"];
+
+  double lat = 37.544986;
+  double long = 126.964370;
+  double zoom = 17.5;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    addMarkers();
+    getCurrentLocation();
+    zoom = sliderVals[sliderContoller.sliderValue];
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
+  addMarkers() async {
+    markers = {};
+    markers.add( //repopulate markers
+        Marker(
+            markerId: MarkerId("current_user_position"),
+            position: LatLng(lat, long), //move to new location
+            icon: BitmapDescriptor.defaultMarker
+        )
+    );
+
+    setState(() {
+      //refresh UI
+    });
+  }
+
+  mapReDraw() async {
+    GoogleMapController googleMapController = await _controller.future;
+    zoom = sliderVals[sliderContoller.sliderValue];
+
+    googleMapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          zoom: zoom,
+          target: LatLng(lat, long),
+        ),
+      ),
+    );
+  }
+
+  Future<Position> getCurrentLocation() async {
+    GoogleMapController googleMapController = await _controller.future;
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    lat = position.latitude;
+    long = position.longitude;
+
+    googleMapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          zoom: zoom,
+          target: LatLng(lat, long),
+        ),
+      ),
+    );
+
+    markers = {};
+    markers.add( //repopulate markers
+        Marker(
+            markerId: MarkerId("current_user_position"),
+            position: LatLng(lat, long), //move to new location
+            icon: BitmapDescriptor.defaultMarker
+        )
+    );
+    //print("@#$@$#@$@#$@#@#$@#$@#$@ GMCONG2 ______________________________________________________________________");
+    setState(() {});
+
+    return position;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +135,17 @@ class _WalkingSettingView extends State<WalkingSettingView> {
           body:SingleChildScrollView(
               child: Container(
                   color: backgroundColor,
-                  height: 700,
+                  height: 660,
                   child: Column(
                     children: [
                       Container(
                           child: GoogleMap(
                             mapType: MapType.normal,
-                            initialCameraPosition: _kGooglePlex,
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(lat!, long!),
+                              zoom: zoom,
+                            ),
+                            markers: markers,
                             onMapCreated: (GoogleMapController controller) {
                               _controller.complete(controller);
                             },
@@ -66,12 +159,12 @@ class _WalkingSettingView extends State<WalkingSettingView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              height: 50,
+                              height: 10,
                             ),
                             Container(
                               width: 350,
                               child: Text(
-                                "장소 검색 거리 반경",
+                                "    장소 검색 거리 반경",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -80,7 +173,43 @@ class _WalkingSettingView extends State<WalkingSettingView> {
                                 textAlign: TextAlign.left,
                               ),
                             ),
-                            CustomSlider(),
+                            Container(
+                              height: 40,
+                            ),
+                            Container(
+                              child: SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                    activeTrackColor: mainColor,
+                                    inactiveTrackColor: grayScale1,
+                                    thumbColor: mainColor,
+                                    activeTickMarkColor: mainColor,
+                                    valueIndicatorColor: mainColor,
+                                    showValueIndicator: ShowValueIndicator.always,
+                                    trackHeight: 5,
+                                    overlayColor: mainColor.withOpacity(0.2),
+                                    overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
+                                    valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+                                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10)),
+                                child: Slider(
+                                  value: sliderContoller.sliderValue.toDouble(),
+                                  min: 0,
+                                  max: 5,
+                                  divisions: 5,
+                                  label: sliderValIndicators[sliderContoller.sliderValue.toInt()], //'${contoller.sliderValue.round()}',
+                                  onChanged: (double newValue) {
+                                    setState(
+                                          () {
+                                            sliderContoller.sliderValue = newValue.toInt();
+                                            mapReDraw();
+                                      },
+                                    );
+                                  },
+                                ),
+                              )
+                            ),
+                            Container(
+                              height: 10,
+                            ),
                             Container(
                               width: 325,
                               child: Row(

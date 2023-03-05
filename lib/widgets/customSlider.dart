@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // Slider Controller
-import 'package:largo/controllers/sliderController.dart';
+import 'package:largo/models/sliderController.dart';
 
 // Colors
 import 'package:largo/color/themeColors.dart';
 
 class CustomSlider extends StatefulWidget {
+
+
   @override
   _CustomSlider createState() => _CustomSlider();
 }
 
 class _CustomSlider extends State<CustomSlider> {
-  var contoller = SliderController(10);
+  var contoller = SliderController(0);
+  List<double> sliderVals = [17.5, 18.5, 20.5, 22, 24, 26];
+  List<String> sliderValIndicators = ["10m", "100m", "500m", "1Km", "5Km", "10Km"];
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +35,15 @@ class _CustomSlider extends State<CustomSlider> {
           valueIndicatorShape: PaddleSliderValueIndicatorShape(),
           thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10)),
       child: Slider(
-        value: contoller.sliderValue,
-        min: 10.0,
-        max: 10000.0,
+        value: contoller.sliderValue.toDouble(),
+        min: 0,
+        max: 5,
         divisions: 5,
-        label: '${contoller.sliderValue.round()}',
+        label: sliderValIndicators[contoller.sliderValue.toInt()], //'${contoller.sliderValue.round()}',
         onChanged: (double newValue) {
           setState(
             () {
-              contoller.sliderValue = newValue;
+              contoller.sliderValue = newValue.toInt();
             },
           );
         },
