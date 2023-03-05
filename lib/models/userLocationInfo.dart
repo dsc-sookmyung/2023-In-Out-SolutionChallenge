@@ -1,10 +1,8 @@
 class GeoLocationInfo {
-  final double latitude;
-  final double longitude;
+  double latitude = 0.0;
+  double longitude = 0.0;
 
-  GeoLocationInfo(
-      {required this.latitude,
-      required this.longitude,});
+  GeoLocationInfo({required this.latitude, required this.longitude});
 
   factory GeoLocationInfo.fromJson(Map<double, dynamic> json) {
     return GeoLocationInfo(
