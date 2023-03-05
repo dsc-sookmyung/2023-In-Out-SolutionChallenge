@@ -63,9 +63,28 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> requestCameraPermission() async {
+
+    final serviceStatusCamera = await Permission.camera.isGranted;
+
+
+    final status = await Permission.camera.request();
+
+    if (status == PermissionStatus.granted) {
+      print('Permission Granted');
+    } else if (status == PermissionStatus.denied) {
+      print('Permission denied');
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      print('Permission Permanently Denied');
+      await openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     requestLocationPermission();
+    requestCameraPermission();
+
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(items: items),
         tabBuilder: (context, index) {
