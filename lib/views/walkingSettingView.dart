@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+// 라우터
+import 'package:largo/router/router.dart';
+
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
 import 'package:largo/widgets/customSlider.dart';
@@ -135,7 +138,7 @@ class _WalkingSettingView extends State<WalkingSettingView> {
           body:SingleChildScrollView(
               child: Container(
                   color: backgroundColor,
-                  height: 660,
+                  height: 670,
                   child: Column(
                     children: [
                       Container(
@@ -224,7 +227,13 @@ class _WalkingSettingView extends State<WalkingSettingView> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               ),
                             ),
-                            CustomButton("걷기 시작")
+                          CustomButton(
+                              GestureDetector(
+                                child: Text("걷기 시작",
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: greyScale4),),
+                                onTap: () => Navigator.pushNamed(context, '/warking/warking'),
+                              ),
+                          )
                           ],
                         ),
                       )

@@ -51,6 +51,7 @@ dependencies:
   flutter_tts: ^3.6.3
   flutter_polyline_points: ^1.0.0
   image_picker: ^0.8.6+4
+  intl: ^0.16.0
 
 
 

@@ -9,16 +9,16 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart'; // 패키지
 
 
-class CustomButton extends StatelessWidget {
-  @override
-  final Size preferredSize;
-  final String title;
+class CustomButton extends StatefulWidget {
+  final Widget child;
 
-  CustomButton(
-    this.title, {
-    Key? key,
-  })  : preferredSize = Size.fromHeight(50.0),
-        super(key: key);
+  CustomButton(this.child);
+
+  @override
+  _CustomButton createState() => _CustomButton();
+}
+
+class _CustomButton extends State<CustomButton> {
 
   var url = "http://inandoutlargo.store:8080/oauth2/authorize/google?redirect_uri=http://inandoutlargo.store/login/oauth2/code/google";
   var html_body = "";
@@ -51,28 +51,72 @@ class CustomButton extends StatelessWidget {
     }
   }
 
+  bool _isPressed = false;
+
+  void _onPointerDown(PointerDownEvent event) {
+    setState(() {
+      _isPressed = true;
+    });
+  }
+
+  void _onPointerUp(PointerUpEvent event) {
+    setState(() {
+      _isPressed = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 10),
-      child: ElevatedButton(
-        onPressed: () {
-          // Respond to button press
-          print("Login test");
-          _launchUrl();
-        },
-        child: Text(
-          this.title,
-          style: TextStyle(fontWeight: FontWeight.bold, color: greyScale4),
+
+    return Listener(
+      onPointerDown: _onPointerDown,
+      onPointerUp: _onPointerUp,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+        padding: EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+        decoration: BoxDecoration(
+          color: buttonColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: _isPressed ? null : [
+            BoxShadow(
+              color: greyScale6   // 현재 테마 색상 중 밝은 그림자 색으로 변경
+            ),
+            BoxShadow(
+              color: greyScale6,   // 현재 테마 색상 중 밝은 그림자 색으로 변경
+            )
+          ],
         ),
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), // <-- Radius
-          ),
-          backgroundColor: buttonColor,
-          minimumSize: const Size.fromHeight(60), // NEW
-        ),
+        child: Center(
+          child: widget.child,),
       ),
     );
   }
 }
+
+//
+// @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: EdgeInsets.only(top: 20, bottom: 10),
+//       child: ElevatedButton(
+//         onPressed: () {
+//           // Respond to button press
+//           print("Login test");
+//           _launchUrl();
+//         },
+//         child: Text(
+//           this.title,
+//           style: TextStyle(fontWeight: FontWeight.bold, color: greyScale4),
+//         ),
+//         style: ElevatedButton.styleFrom(
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(20), // <-- Radius
+//           ),
+//           backgroundColor: buttonColor,
+//           minimumSize: const Size.fromHeight(60), // NEW
+//         ),
+//       ),
+//     );
+//   }
+// }

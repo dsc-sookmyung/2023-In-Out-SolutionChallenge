@@ -9,6 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:largo/viewmodel/newLocationViewModel.dart';
 
+// 라우터
+import 'package:largo/router/router.dart';
+
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
 import 'package:largo/widgets/customSlider.dart';
@@ -53,14 +56,45 @@ class _WalkingView extends State<WalkingView> {
 
   double lat = 37.544986;
   double long = 126.964370;
+  String timeString = "00:00:00";
+  String imageString = "00";
+
+  late Timer timer;
+  var second = 0; // 초
+  var min = 0; // 분
+  var hour = 0; // 시간
 
   final picker = ImagePicker();
   Set<File> images = Set<File>();
 
+  Stopwatch stopwatch = Stopwatch();
+
+  void start(){
+    stopwatch.start();
+    timer = Timer.periodic(Duration(seconds: 1), update);
+  }
+  void update(Timer t){
+    if(stopwatch.isRunning){
+      setState(() {
+        timeString =
+            (stopwatch.elapsed.inHours % 60).toString().padLeft(2, "0") + ":" +
+            (stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, "0") + ":" +
+                (stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, "0");
+      });
+
+    }
+  }
+  void stop(){
+    setState(() {
+      timer.cancel();
+      stopwatch.stop();
+    });
+
+  }
+
   // 비동기 처리를 통해 카메라와 갤러리에서 이미지를 가져온다.
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
-    final bytes = await image!.readAsBytes();
 
     markers.add( //repopulate markers
         Marker(
@@ -72,6 +106,7 @@ class _WalkingView extends State<WalkingView> {
 
     setState(() {
       images.add(File(image!.path)); // 가져온 이미지를 _image에 저장
+      imageString = images.length.toString().padLeft(2, "0");
     });
   }
 
@@ -81,7 +116,7 @@ class _WalkingView extends State<WalkingView> {
     super.initState();
     addMarkers();
     getCurrentLocation();
-
+    start();
     // Camera
     //getCamera();
   }
@@ -96,7 +131,8 @@ class _WalkingView extends State<WalkingView> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    sub.cancel();
+    sub?.cancel();
+    timer?.cancel();
     _controller.complete();
   }
 
@@ -361,7 +397,7 @@ class _WalkingView extends State<WalkingView> {
                             children: [
                               SmallTitle("걸은 시간"),
                               Text(
-                                "00:00:00",
+                                timeString,
                                 style: TextStyle(
                                     color: Colors.black,
                                     letterSpacing: 1,
@@ -379,7 +415,7 @@ class _WalkingView extends State<WalkingView> {
                               Row(
                                 children: [
                                   Text(
-                                    "00",
+                                    imageString,
                                     style: TextStyle(
                                       color: highlightColor,
                                       letterSpacing: 1,
@@ -403,7 +439,15 @@ class _WalkingView extends State<WalkingView> {
                 ),
                 Container(
                   width: 350,
-                  child: CustomButton("그만 걷기"),
+                  child: CustomButton(
+                    GestureDetector(
+                      child: Text("그만 걷기",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: greyScale4),),
+                      onTap: () => {
+                        stop(),
+                        Navigator.pushNamed(context, '/warking/warkingDone')},
+                    ),
+                  )
                 )
               ],
             )))),

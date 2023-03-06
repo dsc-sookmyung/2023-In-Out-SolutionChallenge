@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+// 라우터
+import 'package:largo/router/router.dart';
+
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
 import 'package:largo/widgets/customSlider.dart';
@@ -168,7 +171,13 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                       ),
                       Container(
                         width: 350,
-                        child: CustomButton("공유 하기"),
+                        child: CustomButton(
+                          GestureDetector(
+                            child: Text("공유 하기",
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: greyScale4),),
+                            onTap: () => print("공유 하기"),
+                          ),
+                        ),
                       )
                     ],
                   ))),

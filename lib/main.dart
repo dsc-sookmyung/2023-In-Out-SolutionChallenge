@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+// 라우터
+import 'package:largo/router/router.dart';
+
 // Views
 import 'package:largo/views/walkingSettingView.dart';
 import 'package:largo/views/walkingView.dart';
@@ -24,16 +27,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "/",
+      routes: Routes.routes
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
