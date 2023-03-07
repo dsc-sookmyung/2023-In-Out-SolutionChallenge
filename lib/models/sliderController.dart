@@ -1,4 +1,5 @@
 class SliderController {
-  double sliderValue;
+  int sliderValue;
+
   SliderController(this.sliderValue);
 }

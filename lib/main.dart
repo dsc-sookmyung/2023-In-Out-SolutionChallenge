@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+// 라우터
+import 'package:largo/router/router.dart';
+
 // Views
 import 'package:largo/views/walkingSettingView.dart';
 import 'package:largo/views/walkingView.dart';
 import 'package:largo/views/walkingDoneView.dart';
+
+// Permission handler
+import 'package:permission_handler/permission_handler.dart';
+
+// Geo location
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,16 +27,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "/",
+      routes: Routes.routes
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -39,8 +45,46 @@ class _MyHomePageState extends State<MyHomePage> {
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings))
   ];
 
+  Future<void> requestLocationPermission() async {
+
+    final serviceStatusLocation = await Permission.locationWhenInUse.isGranted ;
+
+    //bool isLocation = serviceStatusLocation == ServiceStatus.enabled;
+
+    final status = await Permission.locationWhenInUse.request();
+
+    if (status == PermissionStatus.granted) {
+      print('Permission Granted');
+    } else if (status == PermissionStatus.denied) {
+      print('Permission denied');
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      print('Permission Permanently Denied');
+      await openAppSettings();
+    }
+  }
+
+  Future<void> requestCameraPermission() async {
+
+    final serviceStatusCamera = await Permission.camera.isGranted;
+
+
+    final status = await Permission.camera.request();
+
+    if (status == PermissionStatus.granted) {
+      print('Permission Granted');
+    } else if (status == PermissionStatus.denied) {
+      print('Permission denied');
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      print('Permission Permanently Denied');
+      await openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    requestLocationPermission();
+    requestCameraPermission();
+
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(items: items),
         tabBuilder: (context, index) {
