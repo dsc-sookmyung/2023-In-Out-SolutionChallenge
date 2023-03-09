@@ -27,7 +27,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         Map<String,Object> attributes = oAuth2User.getAttributes();
 
         String token = jwtTokenProvider.createToken(attributes.get("email").toString(), Role.USER);
-        String targetUrl = "http://localhost:8080/login?token=" + token;
+        String targetUrl = "/login?token=" + token;
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
         log.info("created token {}", token);
