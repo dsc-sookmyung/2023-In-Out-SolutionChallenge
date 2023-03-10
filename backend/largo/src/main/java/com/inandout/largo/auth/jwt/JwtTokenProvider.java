@@ -28,7 +28,7 @@ public class JwtTokenProvider {
 
     private long tokenValidTime = 30*60*1000L;
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init(){
