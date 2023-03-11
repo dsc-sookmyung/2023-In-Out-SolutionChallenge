@@ -1,5 +1,8 @@
 package com.inandout.largo.place.service;
 
+import com.inandout.largo.exception.CustomException;
+import com.inandout.largo.exception.ErrorCode;
+import com.inandout.largo.place.domain.Place;
 import com.inandout.largo.place.domain.PlaceRepository;
 import com.inandout.largo.place.dto.PlaceResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +22,11 @@ public class PlaceService {
         return placeRepository.findAll().stream()
                 .map(PlaceResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public PlaceResponseDto findById(Long id) {
+        Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.RESOURCE_NOT_FOUND));
+        return new PlaceResponseDto(place);
     }
 }
