@@ -4,6 +4,7 @@ import com.inandout.largo.exception.CustomException;
 import com.inandout.largo.exception.ErrorCode;
 import com.inandout.largo.place.domain.Place;
 import com.inandout.largo.place.domain.PlaceRepository;
+import com.inandout.largo.place.dto.PlaceListResponseDto;
 import com.inandout.largo.place.dto.PlaceResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     @Transactional
-    public List<PlaceResponseDto> findAllPlaces(){
+    public List<PlaceListResponseDto> findAllPlaces(){
         return placeRepository.findAll().stream()
-                .map(PlaceResponseDto::new)
+                .map(PlaceListResponseDto::new)
                 .collect(Collectors.toList());
     }
 

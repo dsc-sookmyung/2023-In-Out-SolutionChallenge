@@ -1,6 +1,6 @@
 package com.inandout.largo.place.controller;
 
-import com.inandout.largo.place.dto.PlaceResponseDto;
+import com.inandout.largo.place.dto.PlaceListResponseDto;
 import com.inandout.largo.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping
-    public List<PlaceResponseDto> getPlaceList(){
+    public List<PlaceListResponseDto> getPlaceList(){
         return placeService.findAllPlaces();
     }
 
