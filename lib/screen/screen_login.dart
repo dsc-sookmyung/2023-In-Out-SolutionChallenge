@@ -1,18 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:largo/screen/screen_home.dart';
-import 'package:largo/widget/market1.dart';
-import 'package:largo/widget/market2.dart';
-import 'package:largo/widget/market3.dart';
-import 'package:largo/widget/market4.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
-
+import 'package:http/http.dart' as http;
+import 'package:flutter_web_auth/flutter_web_auth.dart';
+String? token = 'null';
 class ScreenLogin extends StatefulWidget{
   _LoginScreenState createState() => _LoginScreenState();
 }
+Future<void> signIn() async {
+  // 고유한 redirect uri
+  const APP_REDIRECT_URI = "inandoutlargo.store";
+
+  // 백엔드에서 미리 작성된 API 호출
+  final url = Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=$APP_REDIRECT_URI');
+
+  // 백엔드가 제공한 로그인 페이지에서 로그인 후 callback 데이터 반환
+  final result = await FlutterWebAuth.authenticate(
+      url: url.toString(), callbackUrlScheme: APP_REDIRECT_URI);
+
+
+  // 백엔드에서 redirect한 callback 데이터 파싱
+  final accessToken = Uri
+      .parse(result)
+      .queryParameters['token'];
+  token = accessToken;
+
+}
 
 class _LoginScreenState extends State<ScreenLogin> {
+  String response = "";
+  TextEditingController teCon =
+  TextEditingController(text: "https://jsonplaceholder.typicode.com/albums");
+
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +40,10 @@ class _LoginScreenState extends State<ScreenLogin> {
 
   @override
   Widget build(BuildContext context) {
+    final VoidCallback? onTap;
+    final Widget? child;
+    final BorderRadius _baseBorderRadius = BorderRadius.circular(8);
+
     return MaterialApp(
       theme: ThemeData(
         fontFamily : 'notosanskr',
@@ -63,6 +86,7 @@ class _LoginScreenState extends State<ScreenLogin> {
                     textAlign: TextAlign.start,),
                 ),
                 Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
                   width: double.infinity,
                   child: Text(
                     '경험을 찾아서, Largo',
@@ -73,11 +97,41 @@ class _LoginScreenState extends State<ScreenLogin> {
                         fontWeight: FontWeight.w700),
                     textAlign: TextAlign.start,),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                  padding: EdgeInsets.fromLTRB(10, 15, 10, 18),
+                // * 로그인 버튼
+                ElevatedButton(
+                  onPressed: () async {
+                    signIn();
+                      // . . .
+                      // FlutterSecureStorage 또는 SharedPreferences 를 통한
+                      // Token 저장 및 관리
+                      // . . .
 
-                  width: double.infinity,
+
+                    // //_getUrl(teCon.text.toString());
+                    // final url = Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=http://inandoutlargo.store:8080/login/oauth2/code/google');
+                    // final reponse = await http.get(url);
+                    // var result = await http.post(
+                    //     Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=http://inandoutlargo.store:8080/login/oauth2/code/google'),
+                    //     //headers: {'content-type': 'application/json'}
+                    // );
+                    // if (result.statusCode == 201) {
+                    //   _showDialog('Successfully signed up');
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(builder: (context) => ScreenMain())
+                    //   );}
+                    // else{_showDialog('Failed to sign up');}
+                  },
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(	//모서리를 둥글게
+                          borderRadius: BorderRadius.circular(50)),
+                          primary: Colors.white,
+                          minimumSize: Size(double.infinity, 62),
+                          padding: EdgeInsets.fromLTRB(10, 15, 10, 18),
+                          alignment: Alignment.center,
+                          textStyle: const TextStyle(fontSize: 20)
+                      ),
 
                   child: Row(
                     children: [
@@ -94,6 +148,7 @@ class _LoginScreenState extends State<ScreenLogin> {
                           ),
                         ),
 
+
                       ),
 
                       Text(
@@ -106,11 +161,18 @@ class _LoginScreenState extends State<ScreenLogin> {
                         textAlign: TextAlign.center,),
                     ],
                   ),
-
-                  decoration: BoxDecoration(
-                    color : Colors.white,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
+                  width: double.infinity,
+                  child: Text(
+                    token!,
+                    style: TextStyle(
+                        color : Colors.white,
+                        letterSpacing: -0.5,
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.start,),
                 ),
               ],
             )
@@ -122,35 +184,27 @@ class _LoginScreenState extends State<ScreenLogin> {
         )
       ),
     );
+
   }
 
-}
 
-class TagBox extends StatelessWidget {
-  String contents ='';
-  final BorderRadius _baseBorderRadius = BorderRadius.circular(8);
-  @override
-  Widget build(BuildContext context) {
-    String detail = contents;
-    return Container(
-      padding: EdgeInsets.all(5),
-      width: 20,
-      height: 26,
-      color: Colors.white38,
-      child: Text(
-        detail,
-        style: TextStyle(
-            color : Colors.white,
-            letterSpacing: -0.5,
-            fontSize: 12.0,
-            fontWeight: FontWeight.w400),
+
+  void _showDialog(String message) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(message),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
       ),
-
     );
   }
+
 }
-
-
 
 
 
