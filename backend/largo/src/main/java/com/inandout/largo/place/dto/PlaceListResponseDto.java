@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 public class PlaceListResponseDto {
-    private Long id;
-    private Double lon;
-    private Double lat;
+    private Long place_id;
+    private Double longitude;
+    private Double latitude;
 
     public PlaceListResponseDto(Place entity){
-        this.id = entity.getId();
-        this.lon = entity.getPt().getX();
-        this.lat = entity.getPt().getY();
+        this.place_id = entity.getId();
+        this.longitude = entity.getPt().getX();
+        this.latitude = entity.getPt().getY();
     }
 }

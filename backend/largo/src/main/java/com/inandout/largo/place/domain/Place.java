@@ -27,7 +27,7 @@ public class Place {
     @Column
     private String address_name;
 
-    @Column(columnDefinition = "geometry", nullable = false)
+    @Column(columnDefinition = "GEOMETRY(POINT, 4326)", nullable = false)
     private Point pt;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -39,7 +39,7 @@ public class Place {
     @Column(columnDefinition = "TEXT")
     private String picture;
 
-    @OneToMany(mappedBy = "place")
+    @OneToMany(mappedBy = "place", targetEntity = Place_Hashtag.class)
     private List<Hashtag> hashtags = new ArrayList<>();
 
     @Builder

@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -15,17 +16,14 @@ public class Hashtag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tag_id;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "place_id", referencedColumnName = "place_id", nullable = false)
-    private Place place;
-
     @Column(nullable = false)
     private String data;
 
+    @OneToMany(mappedBy = "hashtag", targetEntity = Place_Hashtag.class)
+    private List<Place> places = new ArrayList<>();
+
     @Builder
-    public Hashtag(Place place, String data){
-        this.place = place;
+    public Hashtag(String data){
         this.data = data;
     }
 }
