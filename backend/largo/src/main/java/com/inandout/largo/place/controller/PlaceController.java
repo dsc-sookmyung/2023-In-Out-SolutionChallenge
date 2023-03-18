@@ -1,13 +1,13 @@
 package com.inandout.largo.place.controller;
 
+import com.inandout.largo.place.dto.PlaceResponseDto;
+import com.inandout.largo.place.dto.PlaceSearchRequestDto;
 import com.inandout.largo.place.dto.PlaceListResponseDto;
+import com.inandout.largo.place.dto.PlaceSearchResponseDto;
 import com.inandout.largo.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +23,12 @@ public class PlaceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPlace(@PathVariable Long id){
+    public ResponseEntity<PlaceResponseDto> getPlace(@PathVariable Long id){
         return ResponseEntity.ok(placeService.findById(id));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<PlaceSearchResponseDto> findPlaceWithin(@RequestBody PlaceSearchRequestDto requestDto){
+        return ResponseEntity.ok(placeService.findPlaceWithin(requestDto));
     }
 }
