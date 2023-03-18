@@ -1,36 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-String? token = 'null';
+import 'package:largo/main.dart';
+//sh256인증
+import 'package:crypto/crypto.dart';
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:largo/screen/screen_main.dart';
+
+String? tokenTest = 'null';
+
+Future<String> getShortLink(String screenName) async {
+  String dynamicLinkPrefix = 'https://largo.page.link/share';
+  final dynamicLinkParams = DynamicLinkParameters(
+    uriPrefix: dynamicLinkPrefix,
+    link: Uri.parse('$dynamicLinkPrefix/$screenName'),
+    androidParameters: const AndroidParameters(
+      packageName: 'com.example.largo',
+      minimumVersion: 0,
+    ),
+    iosParameters: const IOSParameters(
+      bundleId: 'com.example.largo',
+      minimumVersion: '0',
+    ),
+  );
+  final dynamicLink =
+  await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
+
+  return dynamicLink.shortUrl.toString();
+}
+Future<Post> fetchPost() async {
+  const APP_REDIRECT_URI = "inandoutlargo.store";
+
+  final url = Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=$APP_REDIRECT_URI');
+  final response =
+  await http.get(url);
+
+  if (response.statusCode == 200) {
+    // 만약 서버로의 요청이 성공하면, JSON을 파싱합니다.
+    return Post.fromJson(json.decode(response.body));
+  } else {
+    // 만약 요청이 실패하면, 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
+class Post {
+
+  final String? token;
+
+  Post({this.token});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      token: json['token'],
+    );
+  }
+}
 class ScreenLogin extends StatefulWidget{
   _LoginScreenState createState() => _LoginScreenState();
 }
-Future<void> signIn() async {
-  // 고유한 redirect uri
-  const APP_REDIRECT_URI = "inandoutlargo.store";
 
-  // 백엔드에서 미리 작성된 API 호출
-  final url = Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=$APP_REDIRECT_URI');
-
-  // 백엔드가 제공한 로그인 페이지에서 로그인 후 callback 데이터 반환
-  final result = await FlutterWebAuth.authenticate(
-      url: url.toString(), callbackUrlScheme: APP_REDIRECT_URI);
-
-
-  // 백엔드에서 redirect한 callback 데이터 파싱
-  final accessToken = Uri
-      .parse(result)
-      .queryParameters['token'];
-  token = accessToken;
-
-}
 
 class _LoginScreenState extends State<ScreenLogin> {
-  String response = "";
-  TextEditingController teCon =
-  TextEditingController(text: "https://jsonplaceholder.typicode.com/albums");
-
+  //String response = "";
+  //TextEditingController teCon =
+  //TextEditingController(text: "https://jsonplaceholder.typicode.com/albums");
+  String _status = '';
 
   @override
   void initState() {
@@ -100,27 +141,7 @@ class _LoginScreenState extends State<ScreenLogin> {
                 // * 로그인 버튼
                 ElevatedButton(
                   onPressed: () async {
-                    signIn();
-                      // . . .
-                      // FlutterSecureStorage 또는 SharedPreferences 를 통한
-                      // Token 저장 및 관리
-                      // . . .
-
-
-                    // //_getUrl(teCon.text.toString());
-                    // final url = Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=http://inandoutlargo.store:8080/login/oauth2/code/google');
-                    // final reponse = await http.get(url);
-                    // var result = await http.post(
-                    //     Uri.parse('http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=http://inandoutlargo.store:8080/login/oauth2/code/google'),
-                    //     //headers: {'content-type': 'application/json'}
-                    // );
-                    // if (result.statusCode == 201) {
-                    //   _showDialog('Successfully signed up');
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(builder: (context) => ScreenMain())
-                    //   );}
-                    // else{_showDialog('Failed to sign up');}
+                    this.signIn();
                   },
                   style: ElevatedButton.styleFrom(
                       elevation: 0,
@@ -166,7 +187,7 @@ class _LoginScreenState extends State<ScreenLogin> {
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
                   width: double.infinity,
                   child: Text(
-                    token!,
+                    tokenTest!,
                     style: TextStyle(
                         color : Colors.white,
                         letterSpacing: -0.5,
@@ -202,6 +223,40 @@ class _LoginScreenState extends State<ScreenLogin> {
         ],
       ),
     );
+  }
+
+
+  Future<void> signIn() async {
+    final url = 'http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=http://inandoutlargo.store:8080/login/oauth2/code/google';
+
+    //inandoutlargo.store
+    final callbackUrlScheme = 'largo.page.link';
+
+    try {
+      logger.d('log1');
+      final result = await FlutterWebAuth.authenticate(url: url, callbackUrlScheme: callbackUrlScheme);
+      logger.d('log2');
+      final token = Uri.parse(result).queryParameters['token'];
+      logger.d('log3');
+      tokenTest = token.toString();
+      logger.d('log4 - token: ', tokenTest);
+
+    } on PlatformException catch (e) {
+      logger.d(e);
+    }
+
+    // dynamic link : https://largo.page.link/main
+
+    // final callbackUrlScheme = 'largo.page.link://main';
+    //
+    // logger.e('log1');
+    // final result = await FlutterWebAuth.authenticate(url: url, callbackUrlScheme: callbackUrlScheme);
+    // logger.e('log2');
+    // final token = Uri.parse(result).queryParameters['token'];
+    // tokenTest = token.toString();
+    // logger.e(token.toString());
+
+
   }
 
 }
