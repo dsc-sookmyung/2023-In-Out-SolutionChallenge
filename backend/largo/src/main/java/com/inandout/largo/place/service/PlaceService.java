@@ -28,12 +28,14 @@ public class PlaceService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public PlaceResponseDto findById(Long id) {
         Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESOURCE_NOT_FOUND));
         return new PlaceResponseDto(place);
     }
 
+    @Transactional
     public PlaceSearchResponseDto findPlaceWithin(PlaceSearchRequestDto requestDto){
         List<Place> res = requestDto.getExclusions().isEmpty() ? placeRepository.findPlaceWithin(requestDto.getLongitude(), requestDto.getLatitude())
                 : placeRepository.findPlaceWithin(requestDto.getLongitude(), requestDto.getLatitude(), requestDto.getExclusions());
