@@ -39,7 +39,7 @@ public class PlaceService {
     public PlaceSearchResponseDto findPlaceWithin(PlaceSearchRequestDto requestDto){
         List<Place> res = requestDto.getExclusions().isEmpty() ? placeRepository.findPlaceWithin(requestDto.getLongitude(), requestDto.getLatitude())
                 : placeRepository.findPlaceWithin(requestDto.getLongitude(), requestDto.getLatitude(), requestDto.getExclusions());
-        if(res.isEmpty()) throw new CustomException(ErrorCode.RESOURCE_NOT_FOUND);
+        if(res.isEmpty()) return new PlaceSearchResponseDto();
         return new PlaceSearchResponseDto(res.get(0));
     }
 }
