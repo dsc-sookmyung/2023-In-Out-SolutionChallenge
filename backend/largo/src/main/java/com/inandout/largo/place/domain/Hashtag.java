@@ -19,7 +19,7 @@ public class Hashtag {
     @Column(nullable = false)
     private String data;
 
-    @OneToMany(mappedBy = "hashtag", targetEntity = Place_Hashtag.class)
+    @OneToMany(mappedBy = "hashtag", targetEntity = PlaceHashtag.class)
     private List<Place> places = new ArrayList<>();
 
     @Builder

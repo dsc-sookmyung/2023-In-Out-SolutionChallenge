@@ -39,7 +39,7 @@ public class Place {
     @Column(columnDefinition = "TEXT")
     private String picture;
 
-    @OneToMany(mappedBy = "place", targetEntity = Place_Hashtag.class)
+    @OneToMany(mappedBy = "place", targetEntity = PlaceHashtag.class)
     private List<Hashtag> hashtags = new ArrayList<>();
 
     @Builder
