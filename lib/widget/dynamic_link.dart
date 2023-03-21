@@ -6,12 +6,20 @@ import 'package:largo/screen/screen_main.dart';
 import 'package:largo/screen/screen_mypage.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:share_plus/share_plus.dart';
 
 class DynamicLink {
   Future<bool> setup() async {
     FirebaseApp app = await Firebase.initializeApp();
     print('Initialized default app $app');
+
+    // Share.share(
+    //   await getShortLink(
+    //      'main',
+    //     'main'
+    //    ),
+    //  );
+
     bool isExistDynamicLink = await _getInitialDynamicLink();
     _addListener();
 
@@ -49,38 +57,30 @@ class DynamicLink {
   }
 
   void _redirectScreen(PendingDynamicLinkData dynamicLinkData) {
-    if (dynamicLinkData.link.queryParameters.containsKey('id')) {
+    if (dynamicLinkData.link.queryParameters.containsKey('route')) {
       String link = dynamicLinkData.link.path.split('/').last;
-      String id = dynamicLinkData.link.queryParameters['id']!;
+      String route = dynamicLinkData.link.queryParameters['route']!;
 
       switch (link) {
-        case 'test':
+        case 'main':
           Get.offAll(
                 () => ScreenMain(),
+            arguments: {
+              "route": route,
+            }
           );
           break;
-        case 'mypage':
-          Get.offAll(
-                () => ScreenMypage(),
-          );
-          break;
-
-
       }
     }
   }
 
   Future<String> getShortLink(String screenName, String id) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      uriPrefix: 'https://largo.page.link/main',
-      link: Uri.parse('https://largo.page.link/main/$screenName'),
+      uriPrefix: 'https://largo.page.link',
+      link: Uri.parse('https://largo.page.link/$screenName?route=$id'),
       androidParameters: const AndroidParameters(
         packageName: 'com.example.largo',
-        minimumVersion: 0,
-      ),
-      iosParameters: const IOSParameters(
-        bundleId: 'com.example.largo',
-        minimumVersion: '0',
+        minimumVersion: 20,
       ),
     );
     final dynamicLink =

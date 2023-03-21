@@ -12,8 +12,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:largo/screen/screen_main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-String? tokenTest = 'null';
+String tokenTest = 'null';
 
 Future<String> getShortLink(String screenName) async {
   String dynamicLinkPrefix = 'https://largo.page.link/share';
@@ -225,39 +226,50 @@ class _LoginScreenState extends State<ScreenLogin> {
     );
   }
 
-
+  //---> 버튼 클릭 시 실행되는 함수 <----
   Future<void> signIn() async {
+
+    //1) url - 백엔드에서 생성한 로그인 연결 API
     final url = 'http://inandoutlargo.store:8080/oauth2/authorization/google?redirect_uri=http://inandoutlargo.store:8080/login/oauth2/code/google';
 
-    //inandoutlargo.store
+    //2) callbackUrlScheme = 내가 생성한 다이나믹 링크의 도메인 이름
     final callbackUrlScheme = 'largo.page.link';
 
     try {
-      logger.d('log1');
+      logger.d('log1 : flutter_web_auth 패키지 활용, 로그인 api 연결');
       final result = await FlutterWebAuth.authenticate(url: url, callbackUrlScheme: callbackUrlScheme);
-      logger.d('log2');
+      final route = Uri.parse(result).queryParameters['route'].toString();
+      if(route == 'main'){
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ScreenMain()));
+      }
+      logger.d('route ', route);      // 백엔드에서 보내준 링크 ex. largo.page.link://main?token={{token}}
+
+      logger.d('log2 : 백엔드에서 보내준 링크에서 token에 해당하는 내용을 변수로 저장');      // 백엔드에서 보내준 링크 ex. largo.page.link://main?token={{token}}
       final token = Uri.parse(result).queryParameters['token'];
-      logger.d('log3');
+
+      logger.d('log3 : Uri형태로 저장한 토큰을 String 형태로 변환');
       tokenTest = token.toString();
+      if(tokenTest =='null'){
+        getToken = false;
+      }
+      else{
+        getToken = true;
+      }
+
       logger.d('log4 - token: ', tokenTest);
+      final user = await SharedPreferences.getInstance();
+      user.setString('token', tokenTest);
+      logger.d('log5 - 토근 확인, ', user.getString('token')??[]);
+
 
     } on PlatformException catch (e) {
       logger.d(e);
     }
-
-    // dynamic link : https://largo.page.link/main
-
-    // final callbackUrlScheme = 'largo.page.link://main';
-    //
-    // logger.e('log1');
-    // final result = await FlutterWebAuth.authenticate(url: url, callbackUrlScheme: callbackUrlScheme);
-    // logger.e('log2');
-    // final token = Uri.parse(result).queryParameters['token'];
-    // tokenTest = token.toString();
-    // logger.e(token.toString());
-
-
   }
+//--->  <----
+
 
 }
 
