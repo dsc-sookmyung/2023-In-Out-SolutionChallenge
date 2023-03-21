@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 
 @Slf4j
 @PropertySource("classpath:application.properties")
@@ -31,21 +32,6 @@ public class FileService {
     @Transactional
     public String uploadFile(UploadRequestDto requestDto){
         return this.create(requestDto.getPath(), new ByteArrayInputStream(requestDto.getFile()));
-        /*
-        BlobId blobId = BlobId.of(bucketName, requestDto.getPath());
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
-                .setContentType("image/jpeg")
-                .build();
-        try {
-            storage.create(blobInfo, requestDto.getFile());
-            String url = "https://storage.googleapis.com/"+bucketName+"/"+ requestDto.getPath();
-
-            return url;
-        } catch (Exception ex) {
-            log.error("fail to upload gcs", ex);
-            throw new CustomException(ErrorCode.FAIL_TO_UPLOAD);
-        }
-        */
     }
 
     @Transactional
@@ -54,15 +40,14 @@ public class FileService {
     }
 
     public String create(String path, InputStream inputStream){
+        String uri = path.substring(0, path.indexOf('.'))+LocalDateTime.now()+path.substring(path.indexOf('.'));
         try {
-            BlobInfo blobInfo = storage.create(BlobInfo.newBuilder(bucketName, path)
+            BlobInfo blobInfo = storage.create(BlobInfo.newBuilder(bucketName, uri)
                             .setContentType("image/jpeg")
                             .build(),
                     inputStream
             );
-            String url = "https://storage.googleapis.com/"+bucketName+"/"+path;
-
-            return url;
+            return "https://storage.googleapis.com/"+bucketName+"/"+uri;
         } catch (Exception ex) {
             log.error("fail to upload gcs", ex);
             throw new CustomException(ErrorCode.FAIL_TO_UPLOAD);
