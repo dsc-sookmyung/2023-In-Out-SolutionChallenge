@@ -30,7 +30,7 @@ public class PlaceResponseDto {
         this.category = entity.getCategory();
         this.picture = entity.getPicture();
         this.hashtags = entity.getHashtags().stream()
-                .map(hashtag -> hashtag.getData())
+                .map(hashtag -> hashtag.getHashtag().getData())
                 .collect(Collectors.toList());
     }
 }

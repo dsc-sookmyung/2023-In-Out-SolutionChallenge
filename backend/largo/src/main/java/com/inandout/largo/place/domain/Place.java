@@ -40,7 +40,7 @@ public class Place {
     private String picture;
 
     @OneToMany(mappedBy = "place", targetEntity = PlaceHashtag.class)
-    private List<Hashtag> hashtags = new ArrayList<>();
+    private List<PlaceHashtag> hashtags = new ArrayList<>();
 
     @Builder
     public Place(String name, String address_num, String address_name, Point pt, String info, String category, String picture){
