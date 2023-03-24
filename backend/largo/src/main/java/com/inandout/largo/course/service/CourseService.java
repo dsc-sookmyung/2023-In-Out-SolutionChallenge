@@ -4,6 +4,7 @@ import com.inandout.largo.course.domain.Course;
 import com.inandout.largo.course.domain.CourseRepository;
 import com.inandout.largo.course.dto.CourseSaveRequestDto;
 import com.inandout.largo.course.dto.CoordinateDto;
+import com.inandout.largo.course.dto.CoursesListResponseDto;
 import com.inandout.largo.exception.CustomException;
 import com.inandout.largo.exception.ErrorCode;
 import com.inandout.largo.course.domain.UserPlaceRepository;
@@ -53,5 +54,17 @@ public class CourseService {
         log.info(lineString.toString());
 
         return lineString;
+    }
+
+    @Transactional
+    public List<CoursesListResponseDto> findAllCourses(String email){
+        return courseRepository.findAllByUser(email).stream()
+                .map(CoursesListResponseDto::new)
+                .toList();
+    }
+
+    @Transactional
+    public List<String> findAllPictures(String email){
+        return userPlaceRepository.findAllByUser(email);
     }
 }
