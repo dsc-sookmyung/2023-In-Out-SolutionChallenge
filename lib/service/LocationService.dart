@@ -20,7 +20,7 @@ class LocationService {
   LocationService._internal() {
     Geolocator.getPositionStream(locationSettings: locationSettings).listen((Position position) {
       _locationController.add(position);
-      print("GPS position : ${position.latitude}, ${position.longitude}");
+      //print("GPS position : ${position.latitude}, ${position.longitude}");
     });
   }
 }

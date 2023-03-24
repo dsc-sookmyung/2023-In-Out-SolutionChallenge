@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // 라우터
 import 'package:largo/router/router.dart';
+import 'package:largo/service/APIService.dart';
 
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
@@ -17,22 +20,47 @@ import 'package:largo/widgets/smallTitle.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+class WalkingDoneViewArguments {
+  final Uint8List? map_image;
+  final String total_time;
+  final double total_distance;
+  final List<LatLng> point_list;
+  final List<Uint8List>? place_img;
+
+  WalkingDoneViewArguments(this.map_image, this.total_time, this.total_distance, this.point_list, this.place_img);
+}
+
 class WalkingDoneView extends StatefulWidget {
+
   @override
   _WalkingDoneView createState() => _WalkingDoneView();
 }
 
 class _WalkingDoneView extends State<WalkingDoneView> {
 
-  Completer<GoogleMapController> _controller = Completer();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.5465, 126.9647),
-    zoom: 14.4746,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final args =
+    ModalRoute.of(context)!.settings.arguments as WalkingDoneViewArguments;
+    String mapImageUrl = "";
+    List<String> userImageUrl = [];
+
+    print("Final Data : ${args.map_image}");
+
+    void uploadImage() {
+      APIService().uploadImage("test_map.jpg", args.map_image!).then((value) => {
+        mapImageUrl = value
+      });
+
+      for(int i = 0; i < args.place_img!.length; i++) {
+        APIService().uploadImage("test_map.jpg", args.place_img![i]).then((value) => {
+          mapImageUrl = value
+        });
+      }
+
+      print("upload done");
+    }
+
     return SafeArea(
         minimum: EdgeInsets.only(top: 40),
         child: Scaffold(
@@ -44,18 +72,11 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                   child: Column(
                     children: [
                       Container(
-                          child: GoogleMap(
-                            mapType: MapType.normal,
-                            initialCameraPosition: _kGooglePlex,
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-                            },
-                          ),
-                          color: mainColor,
+                        child: Image.memory(args.map_image!),
                           height: 250,
                           margin: const EdgeInsets.all(8.0)),
                       Container(
-                          margin: EdgeInsets.only(left: 20, right: 20),
+                          margin: EdgeInsets.only(left: 10, right: 10),
                           child: Column(
                             children: [
                               Row(
@@ -70,7 +91,7 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                                         children: [
                                           SmallTitle("걸은 시간"),
                                           Text(
-                                            "00:00:00",
+                                            args!.total_time,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 letterSpacing: 1,
@@ -89,7 +110,7 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                                           Row(
                                             children: [
                                               Text(
-                                                "1.00",
+                                                args!.total_distance.toStringAsFixed(3),
                                                 style: TextStyle(
                                                   color: highlightColor2,
                                                   letterSpacing: 0.5,
@@ -120,7 +141,7 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                                       Row(
                                         children: [
                                           Text(
-                                            "00",
+                                            args!.place_img!.length.toString().padLeft(2, "0"),
                                             style: TextStyle(
                                               color: highlightColor,
                                               letterSpacing: 1,
@@ -145,18 +166,15 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                         height: 120,
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: 5,
+                            itemCount: args.place_img!.length,
                             itemBuilder: (BuildContext context, int index){
                           return Container(
                             width: 100,
                             height: 100,
+                            child: Image.memory(args.place_img![index]),
                             margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://googleflutter.com/sample_image.jpg'),
-                                  fit: BoxFit.fill),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.23),
@@ -175,7 +193,13 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                           GestureDetector(
                             child: Text("공유 하기",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: greyScale4),),
-                            onTap: () => print("공유 하기"),
+                            onTap: () {
+                              print("공유 하기");
+                              uploadImage();
+                              Future.delayed(Duration(seconds: 2), () {
+                                APIService().uploadRunData(2, args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
+                              });
+                            }
                           ),
                         ),
                       )

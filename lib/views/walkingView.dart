@@ -14,6 +14,7 @@ import 'package:largo/viewmodel/newLocationViewModel.dart';
 
 // 라우터
 import 'package:largo/router/router.dart';
+import 'package:largo/views/walkingDoneView.dart';
 
 // Widget
 import 'package:largo/widgets/customAppbar.dart';
@@ -26,7 +27,7 @@ import 'package:largo/widgets/smallTitle.dart';
 
 // API
 import 'dart:async';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 //model
@@ -42,8 +43,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' show cos, sqrt, asin;
+import 'package:http/http.dart' as http;
 
-enum TtsState { playing, stopped, paused, continued }
+import '../models/PlaceInfo.dart';
+
+enum TtsState { playing, stopped, paused, continued}
 
 class WalkingView extends StatefulWidget {
   @override
@@ -56,18 +60,20 @@ class _WalkingView extends State<WalkingView> {
   late StreamSubscription sub;
 
   final FlutterTts tts = FlutterTts();
-  final TextEditingController controller =
+  final TextEditingController textEditingController =
   TextEditingController(text: 'Hello world');
   var isSpeaking = TtsState.stopped;
 
   Set<Marker> markers = Set(); //markers for google map
   var mymarkers = [];
   var positionList = [];
+  List<int> explainExlusive = [];
   var polylineidx = 1;
 
   Set<Polyline> _polylines = Set<Polyline>();
   PolylinePoints polylinePoints = PolylinePoints();
   List<LatLng> polylineCoordinates = [];
+  late PlaceInfo explain;
 
   double lat = 37.544986;
   double long = 126.964370;
@@ -81,10 +87,15 @@ class _WalkingView extends State<WalkingView> {
   double totalDistance = 0.0; // 총거리
 
   final picker = ImagePicker();
-  Set<File> images = Set<File>();
+  List<Uint8List> images = [];
   var globalKey = new GlobalKey();
 
   Stopwatch stopwatch = Stopwatch();
+
+  String mapImageUrl = "";
+  List<String> userImageUrl = [];
+
+  Uint8List? map_snapshot;
 
   void start() {
     stopwatch.start();
@@ -122,8 +133,7 @@ class _WalkingView extends State<WalkingView> {
             icon: await getMarkerIcon(File(image!.path), 150.0)));
 
     setState(() {
-      images.add(File(image!.path)); // 가져온 이미지를 _image에 저장
-      imageString = images.length.toString().padLeft(2, "0");
+
     });
   }
 
@@ -151,19 +161,27 @@ class _WalkingView extends State<WalkingView> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     sub?.cancel();
-    timer?.cancel();
+    stop();
+    tts.stop();
     _controller.complete();
+    super.dispose();
   }
 
   Future<ui.Image> getImageFromPath(File image) async {
     Uint8List imageBytes = image.readAsBytesSync();
+    //String a = await APIService().uploadImage("test.jpg", imageBytes!);
+    //userImageUrl.add(a);
 
     final Completer<ui.Image> completer = new Completer();
 
     ui.decodeImageFromList(imageBytes, (ui.Image img) {
       return completer.complete(img);
+    });
+
+    setState(() {
+      images.add(imageBytes); // 가져온 이미지를 _image에 저장
+      imageString = images.length.toString().padLeft(2, "0");
     });
 
     return completer.future;
@@ -300,7 +318,8 @@ class _WalkingView extends State<WalkingView> {
 
   Future _speak(String text) async{
     var result = await tts.speak(text);
-    if (result == 1) setState(() => isSpeaking = TtsState.continued);
+    print("TTS Result : ${result}, ${isSpeaking}");
+    if (result == 1) setState(() => isSpeaking = TtsState.playing);
   }
 
   Future _stop() async{
@@ -311,9 +330,10 @@ class _WalkingView extends State<WalkingView> {
   void getCurrentLocation() async {
     GoogleMapController googleMapController = await _controller.future;
 
-    sub = _positionStream.controller.stream.listen((pos) {
+    sub = _positionStream.controller.stream.listen((pos) async {
       lat = pos.latitude;
       long = pos.longitude;
+
       polylineCoordinates.add(LatLng(lat, long));
       positionList.add(LatLng(lat, long));
 
@@ -336,11 +356,19 @@ class _WalkingView extends State<WalkingView> {
               icon: BitmapDescriptor.defaultMarker));
       addPolyline();
 
-      if(isSpeaking == TtsState.stopped){
-        _speak("북서울 꿈의 숲은 서울에서 4번째로 큰 공원입니다! 공원을 둘러싸는 길에는 벚꽃길을, 북쪽 아파트 지역과 인접한 곳에는 단풍숲이 있어요. 창녕위궁재사는 공원 동남쪽에 있으며, 주변에 연못과 정자(애련정) 등이 있답니다. 문화센터에는 300석 규모의 공연장 2개, 다목적홀, 전망대 등이 있어요.");
+      print("isSpeaking ${isSpeaking}");
+
+      tts.setCompletionHandler(() {
+        setState(() {
+          isSpeaking = TtsState.stopped;
+        });
+      });
+
+      if(isSpeaking != TtsState.playing){
+        explain = await APIService().fetchPlaceInfo(lat, long, explainExlusive);
+        _speak(explain.info);
+        explainExlusive.add(explain.id);
       }
-
-
       //print("@#$@$#@$@#$@#@#$@#$@#$@ GMCONG2 ______________________________________________________________________");
       setState(() {
         print("GPS updated");
@@ -371,7 +399,10 @@ class _WalkingView extends State<WalkingView> {
 
     mid_lat = mid_lat / positionList.length;
     mid_lon = mid_lon / positionList.length;
+
   }
+
+
 
   void takeSnapShot() async {
 
@@ -379,20 +410,27 @@ class _WalkingView extends State<WalkingView> {
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          zoom: 17.5 - (totalDistance * 1.2),
+          zoom: 17.5 - (totalDistance * 1.5),
           target: LatLng(mid_lat, mid_lon),
         ),
       ),
     );
-    Future<void>.delayed(const Duration(milliseconds: 1000), () async {
-      Uint8List? imageBytes = await controller.takeSnapshot();
-      final directory = (await getApplicationDocumentsDirectory()).path;
-      File imgFile = new File('$directory/screenshot.png');
-      imgFile.writeAsBytes(imageBytes!);
-      print(imageBytes!);
-      print("FINISH CAPTURE ${imgFile.path}");
-      setState(() {});
-    });
+    snapShot();
+  }
+
+  Future<void> snapShot() async {
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    File imgFile = new File('$directory/screenshot.png');
+
+    GoogleMapController controller = await _controller.future;
+    await controller.takeSnapshot().then((value) => map_snapshot = value);
+    imgFile.writeAsBytes(map_snapshot!);
+
+    print("FINISH CAPTURE ${imgFile.path}");
+
+    // await APIService().uploadImage("test_map.jpg", map_snapshot!).then((value) => {
+    //   mapImageUrl = value
+    // });
   }
 
   @override
@@ -521,15 +559,26 @@ class _WalkingView extends State<WalkingView> {
                                     fontWeight: FontWeight.bold,
                                     color: greyScale4),
                               ),
-                              onTap: () => {
-                                print("그만 걷기 "),
-                                _stop(), // tts 멈춤
-                                stop(), // timer 멈춤
-                                calcTotalDistance(),
-                                takeSnapShot(), // map 캡쳐
-                                print("total Distance ${totalDistance}")
-                                // Navigator.pushNamed(
-                                //     context, '/warking/warkingDone')
+                              onTap: () {
+                                print("그만 걷기 ");
+                                sub?.pause();
+                                calcTotalDistance();
+                                takeSnapShot();
+
+                                Future.delayed(Duration(seconds: 2), () {
+                                print("total Distance ${totalDistance} ${map_snapshot} ${timeString} ${totalDistance} ${polylineCoordinates} ${images}");
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/warking/warkingDone',
+                                        (route) => false,
+                                    arguments: WalkingDoneViewArguments(
+                                        map_snapshot,
+                                        timeString,
+                                        totalDistance,
+                                        polylineCoordinates,
+                                        images
+                                    )
+                                );
+                                });
                               },
                             ),
                           ))
