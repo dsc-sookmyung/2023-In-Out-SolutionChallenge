@@ -6,7 +6,7 @@ import com.inandout.largo.course.dto.CourseSaveRequestDto;
 import com.inandout.largo.course.dto.CoordinateDto;
 import com.inandout.largo.exception.CustomException;
 import com.inandout.largo.exception.ErrorCode;
-import com.inandout.largo.place.domain.UserPlaceRepository;
+import com.inandout.largo.course.domain.UserPlaceRepository;
 import com.inandout.largo.user.domain.User;
 import com.inandout.largo.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class CourseService {
 
     @Transactional
     public void save(CourseSaveRequestDto requestDto){
-        User user = userRepository.findById(requestDto.getUser_id())
+        User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         if(requestDto.getLs().isEmpty()) throw new CustomException(ErrorCode.LACK_OF_INFORMATION);
         LineString ls = getLineString(requestDto.getLs());

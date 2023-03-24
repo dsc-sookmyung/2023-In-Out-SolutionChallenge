@@ -1,4 +1,4 @@
-package com.inandout.largo.place.domain;
+package com.inandout.largo.course.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
