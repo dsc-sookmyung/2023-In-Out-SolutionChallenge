@@ -32,12 +32,16 @@ public class Course {
     @Column(name = "total_dist", nullable = false)
     private Double totalDist;
 
+    @Column(name = "created_date", nullable = false)
+    private String createdDate;
+
     @Builder
-    public Course(User user, LineString ls, String picture, String totalTime, Double totalDist){
+    public Course(User user, LineString ls, String picture, String totalTime, Double totalDist, String createdDate){
         this.user = user;
         this.ls = ls;
         this.picture = picture;
         this.totalTime = totalTime;
         this.totalDist = totalDist;
+        this.createdDate = createdDate;
     }
 }

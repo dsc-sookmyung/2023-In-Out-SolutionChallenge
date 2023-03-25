@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 import org.locationtech.jts.geom.LineString;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -37,6 +38,7 @@ public class CourseSaveRequestDto {
                 .picture(map_picture)
                 .totalTime(total_time)
                 .totalDist(total_dist)
+                .createdDate(LocalDate.now().toString())
                 .build();
     }
 

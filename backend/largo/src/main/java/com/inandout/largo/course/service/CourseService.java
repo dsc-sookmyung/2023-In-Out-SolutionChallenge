@@ -33,7 +33,6 @@ public class CourseService {
     public void save(CourseSaveRequestDto requestDto){
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if(requestDto.getLs().isEmpty()) throw new CustomException(ErrorCode.LACK_OF_INFORMATION);
         LineString ls = getLineString(requestDto.getLs());
 
         Course course = courseRepository.save(requestDto.toCourseEntity(user, ls));
