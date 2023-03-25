@@ -197,7 +197,7 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                               print("공유 하기");
                               uploadImage();
                               Future.delayed(Duration(seconds: 2), () {
-                                APIService().uploadRunData(2, args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
+                                APIService().uploadRunData("yibin99@sookmyung.ac.kr", args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
                               });
                             }
                           ),

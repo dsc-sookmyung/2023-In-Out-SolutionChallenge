@@ -112,7 +112,7 @@ class APIService {
     }
   }
 
-  Future<void> uploadRunData(int userId, List<LatLng> gps, String time, double dist, String map_picture, List<String> user_picture ) async {
+  Future<void> uploadRunData(String email, List<LatLng> gps, String time, double dist, String map_picture, List<String> user_picture ) async {
     print("uploadRunData***********************************************");
     var postUri = Uri.parse('http://34.64.143.243:8080/api/v1/courses');
 
@@ -122,7 +122,7 @@ class APIService {
       gps_temp.add(temp);
     }
 
-    Map<String, dynamic> body = {'user_id': userId, 'ls': gps_temp, 'total_time': time, 'total_dist': dist, 'map_picture':map_picture, 'user_picture': user_picture};
+    Map<String, dynamic> body = {'email': email, 'ls': gps_temp, 'total_time': time, 'total_dist': dist, 'map_picture':map_picture, 'user_picture': user_picture};
 
     print(body.toString());
 
