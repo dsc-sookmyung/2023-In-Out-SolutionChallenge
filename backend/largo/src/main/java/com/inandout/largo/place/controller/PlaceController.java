@@ -1,9 +1,6 @@
 package com.inandout.largo.place.controller;
 
-import com.inandout.largo.place.dto.PlaceResponseDto;
-import com.inandout.largo.place.dto.PlaceSearchRequestDto;
-import com.inandout.largo.place.dto.PlaceListResponseDto;
-import com.inandout.largo.place.dto.PlaceSearchResponseDto;
+import com.inandout.largo.place.dto.*;
 import com.inandout.largo.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +15,7 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping
-    public List<PlaceListResponseDto> getPlaceList(){
+    public List<PlaceListResponseDto> getPlacesList(){
         return placeService.findAllPlaces();
     }
 
@@ -30,5 +27,10 @@ public class PlaceController {
     @PostMapping("/search")
     public ResponseEntity<PlaceSearchResponseDto> findPlaceWithin(@RequestBody PlaceSearchRequestDto requestDto){
         return ResponseEntity.ok(placeService.findPlaceWithin(requestDto));
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<PlaceTopListResponseDto> getTopPlaces(@RequestParam Double latitude, @RequestParam Double longitude){
+        return ResponseEntity.ok(placeService.findTopPlaces(latitude, longitude));
     }
 }
