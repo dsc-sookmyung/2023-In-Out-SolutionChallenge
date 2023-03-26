@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:largo/details/top1.dart';
+import 'package:largo/models/detail_model.dart';
+import 'package:largo/providers/detail_provider.dart';
+import 'package:largo/screen/screen_detail.dart';
+import 'package:largo/screen/screen_login.dart';
 import 'package:largo/screen/screen_mypage.dart';
 import 'package:largo/screen/screen_search.dart';
+import 'package:largo/viewmodel/detail_viewmodel.dart';
 import 'package:largo/widget/bottom_bar.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
 import 'package:largo/widget/market4.dart';
+//상세정보
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ScreenHome extends StatefulWidget{
   _HomeScreenState createState() => _HomeScreenState();
 }
-int _currentIndex=0;
-List cardList=[
-  Market1(),
-  Market2(),
-  Market3(),
-  Market4()
 
-];
 List<T> map<T>(List list, Function handler) {
   List<T> result = [];
   for (var i = 0; i < list.length; i++) {
@@ -29,13 +31,26 @@ List<T> map<T>(List list, Function handler) {
 
 
 class _HomeScreenState extends State<ScreenHome> {
+  String result = '';
+  List data = [];
+
+  int _currentIndex=0;
+  List TopList =[];
+  List cardList=[
+    Market1(),
+    Market2(),
+    Market3(),
+    Market4()
+  ];
   @override
   void initState() {
     super.initState();
+
   }
 
   @override
   Widget build(BuildContext context) {
+    final DetailProvider viewmodel = DetailProvider();
     return MaterialApp(
       theme: ThemeData(
         fontFamily : 'notosanskr',
@@ -120,19 +135,54 @@ class _HomeScreenState extends State<ScreenHome> {
                           fontWeight: FontWeight.w500),
                       textAlign: TextAlign.center),
 
-                  SizedBox(
-                    height: 300,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("상세정보"),
-                        Text("상세정보"),
-                      ],
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 11, 0, 25),
+                    child: SizedBox(
+                      height: 150,
+                      child:ListView(
+                        // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
+                        scrollDirection: Axis.horizontal,
+                        // 컨테이너들을 ListView의 자식들로 추가
+                        children: <Widget>[
+                          InkWell(
+                            onTap:(){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ScreenDetail())
+                              );
+                            },
+                            child: Card(
+                              child : Container(
+                                width: 160.0,
+                                color: Colors.red,
+                              ),
+
+
+
+                            ),
+                          ),
+                          Container(
+                            width: 160.0,
+                            color: Colors.blue,
+                          ),
+                          Container(
+                            width: 160.0,
+                            color: Colors.green,
+                          ),
+                          Container(
+                            width: 160.0,
+                            color: Colors.yellow,
+                          ),
+                          Container(
+                            width: 160.0,
+                            color: Colors.orange,
+                          )
+                        ],
+                      ),
                     ),
                   ),
 
-// 2번째
-// 제목
+
                   Text("우리 동네 전통 시장",
                       style: TextStyle(
                           color : Color(0xff645F5A),
@@ -209,6 +259,8 @@ class _HomeScreenState extends State<ScreenHome> {
       ),
     );
   }
+
+
 
 }
 

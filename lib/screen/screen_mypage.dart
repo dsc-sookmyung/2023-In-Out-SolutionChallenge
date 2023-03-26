@@ -1,18 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:largo/models/course_model.dart';
+import 'package:largo/models/user_model.dart';
 import 'package:largo/screen/screen_home.dart';
+import 'package:largo/screen/screen_login.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
 import 'package:largo/widget/market4.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenMypage extends StatefulWidget{
   _MypageScreenState createState() => _MypageScreenState();
 }
 
 class _MypageScreenState extends State<ScreenMypage> {
+  Future <UserModel> getAPI_user() async {
+    var data;
+    UserModel userInfo;
+    http.Response response;
+    final user = await SharedPreferences.getInstance();
+    response = await http.get(Uri.parse('http://34.64.143.243:8080/api/v1/user'),headers: {
+      // 임시, 로컬 저장소로 바꿔줘야 함.
+      'X-Auth-Token': user.getString('token')??[].toString()
+    });
+
+    try{
+
+      data = await json.decode(utf8.decode(response.bodyBytes));
+      userInfo = await UserModel(
+          user_name: data["user_name"].toString(),
+          picture: data["picture"].toString(),
+          reward: data["reward"].toString(),
+          agreement: data["agreement"], // agreement는 bool
+
+
+      );
+      print('log1');
+    } catch(e){
+      print(e);
+      rethrow;
+    }
+    return userInfo;
+
+  }
+  Future <List <dynamic>> getAPI_record_course() async {
+    http.Response response;
+    List<dynamic> courseList =[];
+    CourseModel termCourseModel;
+    List data;
+    var url =  Uri.parse('http://34.64.143.243:8080/api/v1/courses');
+    print('log3');
+    response = await http.get(url,headers: {
+      // 임시, 로컬 저장소로 바꿔줘야 함.
+      'X-Auth-Token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5aWJpbjk5QHNvb2tteXVuZy5hYy5rciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjc5NzYzMzU4LCJleHAiOjE2Nzk3NzQxNTh9.PXuPgDAQApbVuCEhmFlh3AzE9mqyPAN1NqhOjKtIF8Q'
+    });
+    print(response.body.toString());
+
+    try{
+      data = await json.decode(utf8.decode(response.bodyBytes)) as List;
+      for(int i = 0 ; i< data.length ; i++){
+        print(data.runtimeType);
+        print(data[i].runtimeType);
+        courseList.add(data[i]);
+
+      }
+
+      print(courseList);
+      print(courseList.runtimeType);
+    } catch(e){
+      print(e);
+      rethrow;
+    }
+    return courseList;
+
+  }
+
+  Future <List <dynamic>> getAPI_record_picture() async {
+    http.Response response;
+    var data;
+    var url =  Uri.parse('http://34.64.143.243:8080/api/v1/courses/pictures');
+    List<String> pictureList =[];
+    print('log2');
+    response = await http.get(url,headers: {
+      // 임시, 로컬 저장소로 바꿔줘야 함.
+      'X-Auth-Token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5aWJpbjk5QHNvb2tteXVuZy5hYy5rciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjc5NzYzMzU4LCJleHAiOjE2Nzk3NzQxNTh9.PXuPgDAQApbVuCEhmFlh3AzE9mqyPAN1NqhOjKtIF8Q'
+    });
+    print(response.body.toString());
+
+    try{
+      data = await json.decode(utf8.decode(response.bodyBytes)) as List;
+
+      print(data.toString());
+    } catch(e){
+      print(e);
+      rethrow;
+    }
+    return data;
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,148 +165,161 @@ class _MypageScreenState extends State<ScreenMypage> {
                 Container(
                 margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
                 width: double.infinity,
-                    child : Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/example3.png'),
-                              fit : BoxFit.fitHeight
-                          ),
-                        ),
+                    child : FutureBuilder<UserModel>(
+                      future: getAPI_user(), // a previously-obtained Future<String> or null
+                      builder: (BuildContext context, AsyncSnapshot <UserModel>snapshot) {
 
-                      ),
-                      Container(
-                        width: 240,
-                        height: 100,
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                        child : Column(
+                        if (snapshot.hasError) {
+                          Text("${snapshot.error}");
+                        }else if (snapshot.hasData) {
+                          return Row(
                             children: [
                               Container(
-                                  width: 240,
-                                  height: 30,
-                                  child :Text(
-                                    '박근영 님',
-                                      style: TextStyle(
-                                          color : Color(0xff645F5A),
-                                          letterSpacing: -0.5,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.start
+                                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  image: DecorationImage(
+                                      image:NetworkImage(snapshot.data!.picture as String),
+                                      fit : BoxFit.fitHeight
+                                  ),
+                                ),
 
-                                  )
                               ),
                               Container(
                                   width: 240,
-                                  height: 65,
-                                  margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  child : Row(
+                                  height: 100,
+                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                                  child : Column(
                                       children: [
                                         Container(
-                                            width: 110,
-                                            height: 65,
-                                            margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                            child : Column(
-                                                children: [
-                                                  Container(
-                                                      width: 110,
-                                                      height: 30,
-                                                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                            width: 240,
+                                            height: 30,
+                                            child :Text(
+                                                snapshot.data!.user_name +'님',
+                                                style: TextStyle(
+                                                    color : Color(0xff645F5A),
+                                                    letterSpacing: -0.5,
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.w500),
+                                                textAlign: TextAlign.start
 
-                                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                    child :Text(
-                                                        '누적 포인트',
-                                                        style: TextStyle(
-                                                            color : Colors.white,
-                                                            letterSpacing: -0.5,
-                                                            fontSize: 12.0,
-                                                            fontWeight: FontWeight.w400),
-                                                        textAlign: TextAlign.center
-
-                                                    ),
-                                                      decoration: BoxDecoration(
-                                                      color : Colors.grey,
-                                                      borderRadius: BorderRadius.circular(20),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      width: 110,
-                                                      height: 30,
-                                                      padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
-
-                                                    child :Text(
-                                                        '11,200',
-                                                        style: TextStyle(
-                                                            color : Color(0xff645F5A),
-                                                            letterSpacing: -0.5,
-                                                            fontSize: 12.0,
-                                                            fontWeight: FontWeight.w400),
-                                                        textAlign: TextAlign.center
-
-                                                    ),
-                                                  ),
-
-                                                ])
+                                            )
                                         ),
                                         Container(
-                                            width: 110,
+                                            width: 240,
                                             height: 65,
-                                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            child : Column(
+                                            margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                            child : Row(
                                                 children: [
                                                   Container(
                                                       width: 110,
-                                                      height: 30,
-                                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                                      height: 65,
+                                                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                                      child : Column(
+                                                          children: [
+                                                            Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
-                                                    child :Text(
-                                                        '사진 공유',
-                                                        style: TextStyle(
-                                                            color : Colors.white,
-                                                            letterSpacing: -0.5,
-                                                            fontSize: 12.0,
-                                                            fontWeight: FontWeight.w400),
-                                                        textAlign: TextAlign.center
+                                                              margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                              child :Text(
+                                                                  '누적 포인트',
+                                                                  style: TextStyle(
+                                                                      color : Colors.white,
+                                                                      letterSpacing: -0.5,
+                                                                      fontSize: 12.0,
+                                                                      fontWeight: FontWeight.w400),
+                                                                  textAlign: TextAlign.center
 
-                                                    ),
-                                                      decoration: BoxDecoration(
-                                                      color : Colors.grey,
-                                                      borderRadius: BorderRadius.circular(20),
-                                                    ),
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                color : Colors.grey,
+                                                                borderRadius: BorderRadius.circular(20),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+
+                                                              child :Text(
+                                                                  snapshot.data!.reward,
+                                                                  style: TextStyle(
+                                                                      color : Color(0xff645F5A),
+                                                                      letterSpacing: -0.5,
+                                                                      fontSize: 12.0,
+                                                                      fontWeight: FontWeight.w400),
+                                                                  textAlign: TextAlign.center
+
+                                                              ),
+                                                            ),
+
+                                                          ])
                                                   ),
                                                   Container(
                                                       width: 110,
-                                                      height: 30,
-                                                    padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                                      height: 65,
+                                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                      child : Column(
+                                                          children: [
+                                                            Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                              padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
 
-                                                    child :Text(
-                                                        '활성화',
-                                                        style: TextStyle(
-                                                            color : Color(0xff645F5A),
-                                                            letterSpacing: -0.5,
-                                                            fontSize: 12.0,
-                                                            fontWeight: FontWeight.w400),
-                                                        textAlign: TextAlign.center
+                                                              child :Text(
+                                                                  '사진 공유',
+                                                                  style: TextStyle(
+                                                                      color : Colors.white,
+                                                                      letterSpacing: -0.5,
+                                                                      fontSize: 12.0,
+                                                                      fontWeight: FontWeight.w400),
+                                                                  textAlign: TextAlign.center
 
-                                                    ),
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                color : Colors.grey,
+                                                                borderRadius: BorderRadius.circular(20),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+
+                                                              child :Text(
+                                                                  agreeToText(snapshot.data!.agreement.toString()),
+                                                                  style: TextStyle(
+                                                                      color : Color(0xff645F5A),
+                                                                      letterSpacing: -0.5,
+                                                                      fontSize: 12.0,
+                                                                      fontWeight: FontWeight.w400),
+                                                                  textAlign: TextAlign.center
+
+                                                              ),
+                                                            ),
+                                                          ])
                                                   ),
+
                                                 ])
                                         ),
 
+
                                       ])
-                              ),
+                              )
+                            ],
 
+                          );
+                        };
 
-                            ])
-                      )
-                    ],
+                        return CircularProgressIndicator();
+                      },
+                    ),
 
-                  )
 
               ),
                 Container(
@@ -232,22 +335,100 @@ class _MypageScreenState extends State<ScreenMypage> {
                   ),
               Container(
                   width: double.infinity,
-                  child : Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                        width: 180,
-                        height: 160,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.grey
-                        ),
+                  child : FutureBuilder<List<dynamic>>(
+                    future: getAPI_record_course(), // a previously-obtained Future<String> or null
+                    builder: (BuildContext context, AsyncSnapshot <List<dynamic>>snapshot) {
+                      if (snapshot.hasError) {
+                        Text("${snapshot.error}");
+                      }else if (snapshot.hasData) {
+                        return  SizedBox(
+                          height: 250,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
 
-                      ),
+                              itemCount : snapshot.data!.length,
+                              itemBuilder: (count, index){
+                                return Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
 
 
-                    ],
-                  )
+                                  width: 230,
+                                  height: 250,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.3),
+                                        spreadRadius: 4,
+                                        blurRadius: 10,
+                                        offset: Offset(0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+
+                                          width: 230,
+                                          height: 160,
+                                          decoration: BoxDecoration(
+
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                image: NetworkImage(snapshot.data![index]["picture"].toString()),
+                                                fit : BoxFit.fitWidth
+                                            ),
+                                          ),
+
+                                        ),
+
+                                        Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                                            children: [
+                                          Text(snapshot.data![index]["created_date"].toString()
+                                          ,style: TextStyle(
+                                            color : Color(0xff645F5A),
+                                            letterSpacing: -0.5,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w500),),
+                                
+                                            Text(snapshot.data![index]["total_time"].toString(),
+                                            style: TextStyle(
+                                            color : Colors.grey,
+                                            letterSpacing: -0.5,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w500),),
+                                            Text(snapshot.data![index]["total_dist"].toString(),
+                                            style: TextStyle(
+                                            color : Colors.grey,
+                                            letterSpacing: -0.5,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w500),),
+                                            ],
+                                          )
+                                        ),
+
+
+
+                                      ]
+                                  ),
+
+                                );
+
+                              }),
+                        );
+
+                      };
+
+                      return CircularProgressIndicator();
+                    },
+                  ),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
@@ -263,49 +444,52 @@ class _MypageScreenState extends State<ScreenMypage> {
 
               Container(
                 width: double.infinity,
-                child : Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/example3.png'),
-                            fit : BoxFit.fitHeight
-                        ),
-                      ),
+                child : FutureBuilder<List<dynamic>>(
+                  future: getAPI_record_picture(), // a previously-obtained Future<String> or null
+                  builder: (BuildContext context, AsyncSnapshot <List<dynamic>>snapshot) {
+                    if (snapshot.hasError) {
+                      Text("${snapshot.error}");
+                    }else if (snapshot.hasData) {
+                      return  SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
 
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/example3.png'),
-                            fit : BoxFit.fitHeight
-                        ),
-                      ),
+                            itemCount : snapshot.data!.length,
+                            itemBuilder: (count, index){
+                              return Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
 
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/example3.png'),
-                            fit : BoxFit.fitHeight
-                        ),
-                      ),
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 4,
+                                      blurRadius: 10,
+                                      offset: Offset(0, 3), // ch/ changes position of shadow
+                                    ),
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  image: DecorationImage(
+                                      image: NetworkImage(snapshot.data![index] as String),
+                                      fit : BoxFit.fitHeight
+                                  ),
+                                ),
+                              );
 
-                    ),
-                  ],
-                )
+                            }),
+                      );
+
+                    };
+
+                    return CircularProgressIndicator();
+                  },
+                ),
+
+
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
@@ -334,7 +518,16 @@ class _MypageScreenState extends State<ScreenMypage> {
       ),
     );
   }
+  String agreeToText(String  boolValue){
+    if(boolValue == true){
+      return "활성화";
 
+    }
+    else{
+      return "비활성화";
+
+    }
+  }
 }
 
 class TagBox extends StatelessWidget {
@@ -359,6 +552,7 @@ class TagBox extends StatelessWidget {
 
     );
   }
+
 }
 
 

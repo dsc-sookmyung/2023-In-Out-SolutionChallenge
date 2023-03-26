@@ -68,8 +68,10 @@
                <data android:scheme="largo.page.link" />
            </intent-filter>
        </activity>
-
-
+       <!--google api-->
+       <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyDF9j5N3EBwgDbbMMu6fYmEmKsjBUNpaUc" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

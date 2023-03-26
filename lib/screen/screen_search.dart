@@ -1,22 +1,58 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:largo/main.dart';
+import 'package:largo/models/detail_model.dart';
+import 'package:largo/providers/detail_provider.dart';
 import 'package:largo/screen/screen_detail.dart';
 import 'package:largo/screen/screen_home.dart';
+import 'package:largo/screen/screen_login.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
 import 'package:largo/widget/market4.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+//상세정보
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
+var response;
 
 class ScreenSearch extends StatefulWidget{
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<ScreenSearch> {
+  //test2
+  String result = '';
+  List data = [];
+
+  //test1
+  List<DetailModel> futureDetailInfo =[];
+  bool isLoading = true;
+  DetailProvider detailProvider = DetailProvider();
+
+  Future initDetail() async {
+    var url = Uri.parse(
+        'http://34.64.143.243:8080/api/v1/places/6');
+    var response = await http.get(url);
+    //futureDetailInfo = await detailProvider.getDetail();
+  }
+
+  //test3
+
+
+
   @override
   void initState() {
     super.initState();
+    getJSONData();
+    initDetail();
+    setState(() {
+      isLoading = false;
+    });
+
   }
   final List<String> items = [
     '카테고리별',
@@ -84,7 +120,8 @@ class _SearchScreenState extends State<ScreenSearch> {
         ),
 
 
-        body: Container(
+        body:
+        Container(
           width :double.infinity,
           margin: EdgeInsets.fromLTRB(23, 0, 23, 23),
           child:   Column(
@@ -282,31 +319,33 @@ class _SearchScreenState extends State<ScreenSearch> {
 
                   )),
               Expanded(
-                child: Container(
+                child:
+                Container(
                   margin: EdgeInsets.fromLTRB(0, 14, 0, 0),
-                  child: ListView(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget> [
-                          InformBox(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => ScreenDetail())
-                                );
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.all(32.0),
-                                child: Text('상세박스'),
+                  child: Center(
+                    child: data.length == 0
+                        ? Text(
+                      "데이터가 없습니다",
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    )
+                        : ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Text(data[index]['place_id'].toString()),
+                              ],
                             ),
                           ),
-                        ],
-                      )
+                        );
+                      },
+                      itemCount: data.length,
+                    ),
 
 
-                    ],
+
                   ),
                 ),
               ),
@@ -315,6 +354,22 @@ class _SearchScreenState extends State<ScreenSearch> {
         )
       ),
     );
+  }
+  Future<String> getJSONData() async {
+    var url = Uri.parse(
+        'http://34.64.143.243:8080/api/v1/places/6');
+    var response = await http
+        .get(url);
+    var dataConvertedToJSON = json.decode(utf8.decode(response.bodyBytes));
+    int placeid = dataConvertedToJSON["place_id"];
+    String placeName = dataConvertedToJSON["place_name"];
+    print(placeid);
+    print(placeName);
+
+    print(utf8.decode(response.bodyBytes));
+
+    return 'hello';
+
   }
 
 }

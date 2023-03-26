@@ -248,6 +248,8 @@ class _LoginScreenState extends State<ScreenLogin> {
 
       logger.d('log2 : 백엔드에서 보내준 링크에서 token에 해당하는 내용을 변수로 저장');      // 백엔드에서 보내준 링크 ex. largo.page.link://main?token={{token}}
       final token = Uri.parse(result).queryParameters['token'];
+      final email = Uri.parse(result).queryParameters['email'];
+
 
       logger.d('log3 : Uri형태로 저장한 토큰을 String 형태로 변환');
       tokenTest = token.toString();
@@ -262,6 +264,7 @@ class _LoginScreenState extends State<ScreenLogin> {
       final user = await SharedPreferences.getInstance();
       user.setString('token', tokenTest);
       logger.d('log5 - 토근 확인, ', user.getString('token')??[]);
+      logger.d('log6 - email: ', email.toString());
 
 
     } on PlatformException catch (e) {

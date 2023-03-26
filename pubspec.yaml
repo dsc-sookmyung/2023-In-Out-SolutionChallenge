@@ -51,6 +51,8 @@ dependencies:
   url_launcher: ^6.1.10
   firebase_core: ^2.8.0
   shared_preferences: ^2.0.18
+  google_maps_flutter: ^2.2.5
+
 
 dev_dependencies:
   flutter_test:
