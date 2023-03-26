@@ -92,42 +92,42 @@ def save_csv(path, df):
     return None
 
 
-
-
 ### 실행 예제 ###
 
-# 1. 데이터셋 로드하기
-df = get_csv_file('Solution_Challege/final_data.csv')
+if __name__ == "__main__":
 
-# 2. 특수 기호, 숫자 제거하기
-script = df['대본'].copy()
-script = script.apply(clean_text)
+    # 1. 데이터셋 로드하기
+    df = get_csv_file('final_data.csv')
 
-# 3. konlpy 형태소 사전을 기반으로 한국어 단어 추출
-ko_list = get_nouns_from_konlpy(script[0])
+    # 2. 특수 기호, 숫자 제거하기
+    script = df['대본'].copy()
+    script = script.apply(clean_text)
 
-# 4. Stopword 제거
-stopword_list = open_file_and_get_list_type('stopwords.txt')
-new_ko_list = remove_word_in_tag_list(stopword_list, ko_list)
+    # 3. konlpy 형태소 사전을 기반으로 한국어 단어 추출
+    ko_list = get_nouns_from_konlpy(script[0])
 
-# 한 글자가 너무 많아 명확한 산, 숲, 묘 세 개를 제외한 모든 한 글자 지워버리기
-save_word = ['산', '숲', '묘']
-sample_list = new_ko_list.copy()
+    # 4. Stopword 제거
+    stopword_list = open_file_and_get_list_type('stopwords.txt')
+    new_ko_list = remove_word_in_tag_list(stopword_list, ko_list)
 
-for i in sample_list:
-    if len(i) <= 1 and i not in save_word:
-        new_ko_list.remove(i)
-        
-# 5. 태그 점수 매기기
-# 2번 이상 등장
-tag_list = count_nouns(new_ko_list, script[0])
-list(filter(lambda x: x[1] >= 2, tag_list))
-# 세 글자 이상 높은 점수 주는 것 보다 두글자가 매우 많으므로 두글자면 -1하기
+    # 한 글자가 너무 많아 명확한 산, 숲, 묘 세 개를 제외한 모든 한 글자 지워버리기
+    save_word = ['산', '숲', '묘']
+    sample_list = new_ko_list.copy()
+
+    for i in sample_list:
+        if len(i) <= 1 and i not in save_word:
+            new_ko_list.remove(i)
+            
+    # 5. 태그 점수 매기기
+    # 2번 이상 등장
+    tag_list = count_nouns(new_ko_list, script[0])
+    list(filter(lambda x: x[1] >= 2, tag_list))
+    # 세 글자 이상 높은 점수 주는 것 보다 두글자가 매우 많으므로 두글자면 -1하기
 
 
 
 
-### 자동화 실행 예제 ###
-make_tag_list(script[20])
+    ### 자동화 실행 예제 ###
+    make_tag_list(script[20])
 
-df['태그'] = script.apply(make_tag_list)
+    df['태그'] = script.apply(make_tag_list)
