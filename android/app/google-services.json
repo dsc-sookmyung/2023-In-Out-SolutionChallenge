@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "624767437193",
+    "project_id": "largo-208ca",
+    "storage_bucket": "largo-208ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624767437193:android:80766918e227e599b43958",
+        "android_client_info": {
+          "package_name": "com.example.largo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624767437193-5ndvvkac7shf72iheslff0m5k8glar8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzBv3b-wXxkm6uX4ydFGa7GWA2Las5cJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624767437193-5ndvvkac7shf72iheslff0m5k8glar8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

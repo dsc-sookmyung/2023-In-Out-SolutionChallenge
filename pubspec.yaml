@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=3.0.0-202.0.dev <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -33,6 +33,13 @@ dependencies:
   camera: ^0.10.3+2
   path_provider:
   path:
+  carousel_slider: ^4.2.1
+  dropdown_button2: ^2.0.0
+  http: ^0.13.5
+  flutter_web_auth: ^0.5.0
+  logger: ^1.3.0
+  go_router: ^6.0.9
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,13 +54,20 @@ dependencies:
   plugin_platform_interface: ^2.0.0
   permission_handler: ^9.2.0
   http: ^0.13.1
-  url_launcher: ^6.1.10
   flutter_tts: ^3.6.3
   flutter_polyline_points: ^1.0.0
   image_picker: ^0.8.6+4
   intl: ^0.16.0
   js: ^0.6.2
 
+  firebase_dynamic_links: ^5.0.17
+  uni_links: ^0.5.1
+  get: ^4.6.5
+  share_plus: ^6.3.1
+  crypto: ^3.0.2
+  url_launcher: ^6.1.10
+  firebase_core: ^2.8.0
+  shared_preferences: ^2.0.18
 
 
 dev_dependencies:
@@ -77,6 +91,32 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets :
+    - assets/images/example.png
+    - assets/images/example2.png
+    - assets/images/example3.png
+    - assets/images/google.png
+    - assets/images/largo.png
+    - assets/images/Banner1.png
+    - assets/images/Banner2.png
+    - assets/images/Banner3.png
+    - assets/images/Banner4.png
+
+  fonts :
+      - family : notosanskr
+        fonts :
+          - asset : assets/font/notosanskr_light.otf
+            weight : 300
+          - asset : assets/font/notosanskr_regular.otf
+            weight : 400
+          - asset : assets/font/notosanskr_medium.otf
+            weight : 500
+          - asset : assets/font/notosanskr_bold.otf
+            weight : 700
+          #- asset : font/notosanskr_light.otf
+         # - asset : font/notosanskr_medium.otf
+         # - asset : font/notosanskr_regular.otf
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

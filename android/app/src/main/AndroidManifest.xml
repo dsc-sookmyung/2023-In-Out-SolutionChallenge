@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.inandout.largo">
+    package="com.example.largo">
 
     <!-- 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -38,6 +38,8 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -51,6 +53,50 @@
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
+
+<!--            <intent-filter android:autoVerify="true">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="http" android:host="largo" />-->
+<!--                <data android:scheme="https" />-->
+<!--            </intent-filter>-->
+
+            <!--For Dynamic links-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="largo.page.link"
+                    android:scheme="https"/>
+            </intent-filter>
+
+        </activity>
+<!--       <activity android:name="com.example.largo." android:exported="true">-->
+<!--           <intent-filter android:label="flutter_web_auth">-->
+<!--               <action android:name="android.intent.action.VIEW" />-->
+<!--               <category android:name="android.intent.category.DEFAULT" />-->
+<!--               <category android:name="android.intent.category.BROWSABLE" />-->
+<!--               <data android:scheme="YOUR_CALLBACK_URL_SCHEME_HERE" />-->
+<!--           </intent-filter>-->
+<!--       </activity>-->
+
+       <activity android:name="com.linusu.flutter_web_auth.CallbackActivity"
+           android:exported="true"
+           >
+
+           <intent-filter android:label="flutter_web_auth" android:autoVerify="true">
+               <action android:name="android.intent.action.VIEW" />
+               <category android:name="android.intent.category.DEFAULT" />
+               <category android:name="android.intent.category.BROWSABLE" />
+               <data android:scheme="largo.page.link" />
+           </intent-filter>
+       </activity>
+       <!--google api-->
+       <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyDF9j5N3EBwgDbbMMu6fYmEmKsjBUNpaUc" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
@@ -58,4 +104,5 @@
             android:value="2" />
 
     </application>
+
 </manifest>
