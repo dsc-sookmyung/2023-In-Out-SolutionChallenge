@@ -22,14 +22,13 @@ import 'package:largo/models/detail_model.dart';
 import '../main.dart';
 
 
-class ScreenDetail extends StatefulWidget{
-  _DetailScreenState createState() => _DetailScreenState();
-}
+class ScreenDetail extends StatelessWidget{
+  final int homeData_id;
 
-class _DetailScreenState extends State<ScreenDetail> {
+  ScreenDetail(@required this.homeData_id);
 
   Future <DetailModel> getJSONData() async {
-    var url = Uri.parse('http://34.64.143.243:8080/api/v1/places/1');
+    var url = Uri.parse('http://34.64.143.243:8080/api/v1/places/${homeData_id}');
     http.Response response;
     var data;
     List<DetailModel> details =[];
@@ -64,196 +63,195 @@ class _DetailScreenState extends State<ScreenDetail> {
       rethrow;
     }
   }
-
-  @override
-  void initState() {
-    super.initState();
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        fontFamily : 'notosanskr',
-      ),
-      home: Scaffold(
-        backgroundColor: Color(0xffF5F5F5),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: AppBar(
-              backgroundColor: Color(0xffF5F5F5),
-              leading:  IconButton(
-                color : Color(0xff645F5A),
-                onPressed:(){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ScreenHome())
-                  );
-                },
-                icon : Icon(Icons.arrow_back_sharp),
-              ),
-              centerTitle: true, // 제목 중앙정렬 허용
-              elevation: 0, // 그림자 없애기
-
+    return Scaffold(
+      backgroundColor: Color(0xffF5F5F5),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Color(0xffF5F5F5),
+          leading:  IconButton(
+            color : Color(0xff645F5A),
+            onPressed:(){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ScreenHome())
+              );
+            },
+            icon : Icon(Icons.arrow_back_sharp),
           ),
+          centerTitle: true, // 제목 중앙정렬 허용
+          elevation: 0, // 그림자 없애기
+
         ),
+      ),
 
 
-        body: Container(
-          width :double.infinity,
-          margin: EdgeInsets.fromLTRB(23, 0, 23, 23),
+      body: Container(
+        width :double.infinity,
+        margin: EdgeInsets.fromLTRB(23, 0, 23, 23),
 
-          child:FutureBuilder<DetailModel>(
-            future: getJSONData(), // a previously-obtained Future<String> or null
-            builder: (BuildContext context, AsyncSnapshot <DetailModel>snapshot) {
+        child:FutureBuilder<DetailModel>(
+          future: getJSONData(), // a previously-obtained Future<String> or null
+          builder: (BuildContext context, AsyncSnapshot <DetailModel>snapshot) {
 
-              if (snapshot.hasError) {
-                Text("${snapshot.error}");
-              }else if (snapshot.hasData) {
-                return  ListView(
-                    children :[
-                      Container(
-                        width : double.infinity,
-                        height: 250,
-                        decoration: BoxDecoration(
-                          //color : Colors.red,
-                          borderRadius: BorderRadius.circular(13),
-                          image: DecorationImage(
-                              image: NetworkImage(snapshot.data!.picture as String),
-                              fit : BoxFit.fitWidth
+            if (snapshot.hasError) {
+              Text("${snapshot.error}");
+            }else if (snapshot.hasData) {
+              return  ListView(
+                  children :[
+                    Container(
+                      width : double.infinity,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        //color : Colors.red,
+                        borderRadius: BorderRadius.circular(13),
+                        image: DecorationImage(
+                            image: NetworkImage(snapshot.data!.picture as String),
+                            fit : BoxFit.fitWidth
+                        ),
+
+                      ),
+                    ),
+                    //api 호출 테스트 컨테이너
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 16, 0, 10),
+                      width: double.infinity,
+                      child: Text(
+                        snapshot.data!.placeName,
+                        style: TextStyle(
+                            color : Color(0xff645F5A),
+                            letterSpacing: -0.5,
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w700),),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
+
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 26,
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              snapshot.data!.category,
+                              style: TextStyle(
+                                  color : Colors.white,
+                                  letterSpacing: -0.8,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w400),),
+                            decoration: BoxDecoration(
+                              color : Colors.grey,
+                              borderRadius: BorderRadius.circular(3),
+                            ),),
+                          Container(
+                            height: 26,
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              snapshot.data!.hashtags1,
+                              style: TextStyle(
+                                  color : Colors.white,
+                                  letterSpacing: -0.8,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w400),),
+                            decoration: BoxDecoration(
+                              color : Colors.grey,
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+
+
+
+                          ),
+                          Container(
+                            height: 26,
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              snapshot.data!.hashtags2,
+                              style: TextStyle(
+                                  color : Colors.white,
+                                  letterSpacing: -0.8,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w400),),
+                            decoration: BoxDecoration(
+                              color : Colors.grey,
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+
+
+
                           ),
 
-                        ),
+                        ],
                       ),
-                      //api 호출 테스트 컨테이너
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 16, 0, 10),
-                        width: double.infinity,
-                        child: Text(
-                          snapshot.data!.placeName,
-                          style: TextStyle(
-                              color : Color(0xff645F5A),
-                              letterSpacing: -0.5,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w700),),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        snapshot.data!.info,
+                        style: TextStyle(
+                            color : Color(0xff645F5A),
+                            letterSpacing: -0.5,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 36, 0, 11),
 
-                        child: Row(
-                          children: [
-                          Container(
-                          height: 26,
-                          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            snapshot.data!.category,
-                            style: TextStyle(
-                                color : Colors.white,
-                                letterSpacing: -0.8,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400),),
-                          decoration: BoxDecoration(
-                            color : Colors.grey,
-                            borderRadius: BorderRadius.circular(3),
-                          ),),
-                            Container(
-                              height: 26,
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                snapshot.data!.hashtags1,
-                                style: TextStyle(
-                                    color : Colors.white,
-                                    letterSpacing: -0.8,
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w400),),
-                              decoration: BoxDecoration(
-                                color : Colors.grey,
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-
-
-
-                            ),
-                            Container(
-                              height: 26,
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                snapshot.data!.hashtags2,
-                                style: TextStyle(
-                                    color : Colors.white,
-                                    letterSpacing: -0.8,
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w400),),
-                              decoration: BoxDecoration(
-                                color : Colors.grey,
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-
-
-
-                            ),
-
-                          ],
-                        ),
+                      width: double.infinity,
+                      child: Text(
+                        '위치정보',
+                        style: TextStyle(
+                            color : Color(0xff645F5A),
+                            letterSpacing: -0.5,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w500),
                       ),
-                      Container(
-                        width: double.infinity,
-                        child: Text(
-                          snapshot.data!.info,
-                          style: TextStyle(
-                              color : Color(0xff645F5A),
-                              letterSpacing: -0.5,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 36, 0, 11),
+                    ),
+                    Container(
+                      width : double.infinity,
+                      padding: EdgeInsets.all(20),
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color : Colors.grey,
+                        borderRadius: BorderRadius.circular(10),
 
-                        width: double.infinity,
-                        child: Text(
-                          '위치정보',
-                          style: TextStyle(
-                              color : Color(0xff645F5A),
-                              letterSpacing: -0.5,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500),
-                        ),
                       ),
-                      Container(
-                        width : double.infinity,
-                        padding: EdgeInsets.all(20),
-                        height: 250,
-                        decoration: BoxDecoration(
-                          color : Colors.grey,
-                          borderRadius: BorderRadius.circular(10),
-
-                        ),
 
 
                     )
                   ]
-                );
-              };
+              );
+            };
 
-              return CircularProgressIndicator();
-            },
-          ),
-
-
-
+            return CircularProgressIndicator();
+          },
         ),
+
+
+
       ),
     );
+
   }
-
-
 }
+
+
+
+
+  
+
+ 
+
+
+
+
+
+
 
 class TagBox extends StatelessWidget {
   String contents ='';

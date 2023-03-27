@@ -18,6 +18,7 @@ class ScreenMypage extends StatefulWidget{
 }
 
 class _MypageScreenState extends State<ScreenMypage> {
+  //회원 정보 불러오기
   Future <UserModel> getAPI_user() async {
     var data;
     UserModel userInfo;
@@ -47,6 +48,8 @@ class _MypageScreenState extends State<ScreenMypage> {
     return userInfo;
 
   }
+
+  // 회원의 코스기록 불러오기
   Future <List <dynamic>> getAPI_record_course() async {
     http.Response response;
     List<dynamic> courseList =[];
@@ -54,9 +57,10 @@ class _MypageScreenState extends State<ScreenMypage> {
     List data;
     var url =  Uri.parse('http://34.64.143.243:8080/api/v1/courses');
     print('log3');
+    final user = await SharedPreferences.getInstance();
     response = await http.get(url,headers: {
       // 임시, 로컬 저장소로 바꿔줘야 함.
-      'X-Auth-Token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5aWJpbjk5QHNvb2tteXVuZy5hYy5rciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjc5NzYzMzU4LCJleHAiOjE2Nzk3NzQxNTh9.PXuPgDAQApbVuCEhmFlh3AzE9mqyPAN1NqhOjKtIF8Q'
+      'X-Auth-Token': user.getString('token')??[].toString()
     });
     print(response.body.toString());
 
@@ -79,23 +83,24 @@ class _MypageScreenState extends State<ScreenMypage> {
 
   }
 
+  // 회원의 사진 기록 불러오기
   Future <List <dynamic>> getAPI_record_picture() async {
     http.Response response;
     var data;
     var url =  Uri.parse('http://34.64.143.243:8080/api/v1/courses/pictures');
-    List<String> pictureList =[];
+    final user = await SharedPreferences.getInstance();
     print('log2');
     response = await http.get(url,headers: {
-      // 임시, 로컬 저장소로 바꿔줘야 함.
-      'X-Auth-Token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5aWJpbjk5QHNvb2tteXVuZy5hYy5rciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjc5NzYzMzU4LCJleHAiOjE2Nzk3NzQxNTh9.PXuPgDAQApbVuCEhmFlh3AzE9mqyPAN1NqhOjKtIF8Q'
+      'X-Auth-Token': user.getString('token')??[].toString()
     });
     print(response.body.toString());
 
     try{
       data = await json.decode(utf8.decode(response.bodyBytes)) as List;
-
       print(data.toString());
+
     } catch(e){
+
       print(e);
       rethrow;
     }
@@ -117,6 +122,7 @@ class _MypageScreenState extends State<ScreenMypage> {
       ),
       home: Scaffold(
         backgroundColor: Color(0xffF5F5F5),
+
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60),
           child: AppBar(
@@ -159,7 +165,6 @@ class _MypageScreenState extends State<ScreenMypage> {
         body: Container(
           width :double.infinity,
           margin: EdgeInsets.fromLTRB(23, 0, 23, 23),
-
           child:   ListView(
             children :[
                 Container(
@@ -345,7 +350,6 @@ class _MypageScreenState extends State<ScreenMypage> {
                           height: 250,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-
                               itemCount : snapshot.data!.length,
                               itemBuilder: (count, index){
                                 return Container(

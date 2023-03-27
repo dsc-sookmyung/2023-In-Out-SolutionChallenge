@@ -58,14 +58,7 @@ class _MyappState extends State<MyApp>{
   void setup() async {
     FirebaseApp app = await Firebase.initializeApp();
     print('Initialized default app $app');
-    // Share.share(
-    //   await getShortLink(
-    //     'main',
-    //     'main'
-    //   ),
-    // );
     _getInitialDynamicLink();
-
     logger.d('start');
   }
 

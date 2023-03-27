@@ -81,6 +81,10 @@ flutter:
     - assets/images/example3.png
     - assets/images/google.png
     - assets/images/largo.png
+    - assets/images/Banner1.png
+    - assets/images/Banner2.png
+    - assets/images/Banner3.png
+    - assets/images/Banner4.png
 
   fonts :
       - family : notosanskr
