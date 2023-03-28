@@ -4,6 +4,7 @@ import 'package:largo/models/course_model.dart';
 import 'package:largo/models/user_model.dart';
 import 'package:largo/screen/screen_home.dart';
 import 'package:largo/screen/screen_login.dart';
+import 'package:largo/screen/screen_main.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
@@ -132,7 +133,7 @@ class _MypageScreenState extends State<ScreenMypage> {
                 onPressed:(){
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ScreenHome())
+                      MaterialPageRoute(builder: (context) => ScreenMain())
                   );
                 },
                 icon : Icon(Icons.arrow_back_sharp),
@@ -179,6 +180,7 @@ class _MypageScreenState extends State<ScreenMypage> {
                         }else if (snapshot.hasData) {
                           return Row(
                             children: [
+                              // 회원 얼굴
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                                 width: 100,

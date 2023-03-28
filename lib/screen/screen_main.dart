@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:largo/screen/screen_home.dart';
 import 'package:largo/screen/screen_login.dart';
+import 'package:largo/screen/screen_mypage.dart';
 import 'package:largo/widget/bottom_bar.dart';
+
+import '../views/walkingSettingView.dart';
 
 
 
@@ -14,29 +18,28 @@ class ScreenMain extends StatefulWidget{
 
 
 class _MyappState extends State<ScreenMain>{
+  List<BottomNavigationBarItem> items = [
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home)),
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.group)),
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings))
+  ];
   late TabController controller;
   @override
   Widget build(BuildContext context){
-    return MaterialApp(title: 'Largo',
-      theme: ThemeData(
-        brightness: Brightness.dark ,
-        primaryColor: Colors.black,
-        accentColor: Colors.white,
-      ),
-      home: DefaultTabController(length: 3,
-        child : Scaffold(
-          body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children : <Widget> [
-              ScreenHome(),
-              ScreenLogin(),
-              Container(child: Center(child: Text('프로필'),),)
-            ],
-          ),
-          bottomNavigationBar: Bottom(),
-        ),
-      ),
-    );
+    return CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(items: items),
+        tabBuilder: (context, index) {
+          switch (index) {
+            case 0:
+              return ScreenHome();
+            case 1:
+              return WalkingSettingView();
+            case 2:
+              return ScreenMypage();
+            default:
+              return ScreenHome();
+          }
+        });
   }
 
 }

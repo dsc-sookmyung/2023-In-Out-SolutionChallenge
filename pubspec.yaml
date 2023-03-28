@@ -53,11 +53,10 @@ dependencies:
   # permission handler
   plugin_platform_interface: ^2.0.0
   permission_handler: ^9.2.0
-  http: ^0.13.1
   flutter_tts: ^3.6.3
   flutter_polyline_points: ^1.0.0
   image_picker: ^0.8.6+4
-  intl: ^0.16.0
+  #intl: ^0.16.0
   js: ^0.6.2
 
   firebase_dynamic_links: ^5.0.17
@@ -68,6 +67,7 @@ dependencies:
   url_launcher: ^6.1.10
   firebase_core: ^2.8.0
   shared_preferences: ^2.0.18
+  fluttertoast: ^8.2.1
 
 
 dev_dependencies:

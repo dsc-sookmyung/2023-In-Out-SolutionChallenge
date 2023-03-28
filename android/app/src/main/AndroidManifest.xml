@@ -15,11 +15,6 @@
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
 
-
-       <meta-data
-           android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyDF9j5N3EBwgDbbMMu6fYmEmKsjBUNpaUc" />
-
        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <activity
@@ -44,7 +39,6 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -52,15 +46,6 @@
                 <data android:scheme="http" android:host="flutterbooksample.com" />
                 <data android:scheme="https" />
             </intent-filter>
-        </activity>
-
-<!--            <intent-filter android:autoVerify="true">-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-<!--                <data android:scheme="http" android:host="largo" />-->
-<!--                <data android:scheme="https" />-->
-<!--            </intent-filter>-->
 
             <!--For Dynamic links-->
             <intent-filter>

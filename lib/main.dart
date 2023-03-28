@@ -86,11 +86,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<BottomNavigationBarItem> items = [
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home)),
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.group)),
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings))
-  ];
+
 
   Future<void> requestLocationPermission() async {
 
@@ -175,20 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
     requestLocationPermission();
     requestCameraPermission();
 
-    return CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(items: items),
-        tabBuilder: (context, index) {
-          switch (index) {
-            case 0:
-              return screen_home();
-            case 1:
-              return WalkingSettingView();
-            case 2:
-              return screen_mypage();
-            default:
-              return screen_home();
-          }
-        });
+    return ScreenLogin();
   }
   Future<SharedPreferences> localStorage_token() async{
     final user = await SharedPreferences.getInstance();

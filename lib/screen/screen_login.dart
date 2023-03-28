@@ -11,6 +11,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:largo/screen/screen_home.dart';
 import 'package:largo/screen/screen_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -91,7 +92,7 @@ class _LoginScreenState extends State<ScreenLogin> {
         fontFamily : 'notosanskr',
       ),
       home: Scaffold(
-        backgroundColor: Color(0xffFFC977),
+        backgroundColor: Color(0xfaffc977),
 
 
         body: Container(
