@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> requestLocationPermission() async {
 
-    final serviceStatusLocation = await Permission.locationWhenInUse.isGranted ;
+    final serviceStatusLocation = await Permission.locationWhenInUse.isGranted;
 
     //bool isLocation = serviceStatusLocation == ServiceStatus.enabled;
 
@@ -109,7 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> requestCameraPermission() async {
 
     final serviceStatusCamera = await Permission.camera.isGranted;
-
 
     final status = await Permission.camera.request();
 

@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       centerTitle: true,
       backgroundColor: Colors.white,
-      leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: null),
+      leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: () => Navigator.pop(context),),
       automaticallyImplyLeading: true,
     );
   }

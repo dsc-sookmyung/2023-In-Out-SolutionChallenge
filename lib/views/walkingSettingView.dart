@@ -30,6 +30,8 @@ import 'package:geolocator/geolocator.dart';
 // Colors
 import 'package:largo/color/themeColors.dart';
 
+import '../screen/screen_detail.dart';
+
 class WalkingSettingView extends StatefulWidget {
   @override
   _WalkingSettingView createState() => _WalkingSettingView();
@@ -38,7 +40,6 @@ class WalkingSettingView extends StatefulWidget {
 class _WalkingSettingView extends State<WalkingSettingView> {
   Completer<GoogleMapController> _controller = Completer();
   late Future<List<MarkerInfo>> markersInfo;
-
   Set<Marker> markers = Set(); //markers for google map
 
   var sliderContoller = SliderController(2);
@@ -81,8 +82,17 @@ class _WalkingSettingView extends State<WalkingSettingView> {
         markers.add(//repopulate markers
             Marker(
                 markerId: MarkerId("marker_position_${element.id}"),
-                position: LatLng(element.latitude, element.longitude), //move to new location
-                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)));
+                position: LatLng(element.latitude, element.longitude),
+                draggable: true,//move to new locatio
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                onTap: () async{
+                  final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ScreenDetail(element.id))
+                  );
+                },
+            ),
+        );
       });
     });
 
@@ -169,6 +179,7 @@ class _WalkingSettingView extends State<WalkingSettingView> {
                         Container(
                             child: GoogleMap(
                               mapType: MapType.normal,
+                              myLocationButtonEnabled: false,
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(lat!, long!),
                                 zoom: zoom,

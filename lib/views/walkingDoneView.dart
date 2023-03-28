@@ -20,6 +20,8 @@ import 'package:largo/widgets/smallTitle.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../screen/screen_main.dart';
+
 class WalkingDoneViewArguments {
   final Uint8List? map_image;
   final String total_time;
@@ -171,10 +173,13 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                           return Container(
                             width: 100,
                             height: 100,
-                            child: Image.memory(args.place_img![index]),
                             margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: MemoryImage(args.place_img![index]),
+                                fit : BoxFit.fitHeight
+                              ),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.23),
@@ -197,7 +202,8 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                               print("공유 하기");
                               uploadImage();
                               Future.delayed(Duration(seconds: 2), () {
-                                APIService().uploadRunData("yibin99@sookmyung.ac.kr", args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
+                                APIService().uploadRunData(args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
+                                Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
                               });
                             }
                           ),

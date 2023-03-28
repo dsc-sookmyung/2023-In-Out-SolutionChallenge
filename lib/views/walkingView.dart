@@ -46,6 +46,7 @@ import 'dart:math' show cos, sqrt, asin;
 import 'package:http/http.dart' as http;
 
 import '../models/PlaceInfo.dart';
+import '../screen/screen_detail.dart';
 
 enum TtsState { playing, stopped, paused, continued}
 
@@ -129,7 +130,7 @@ class _WalkingView extends State<WalkingView> {
     markers.add(//repopulate markers
         Marker(
             markerId: MarkerId("${image.hashCode}"),
-            position: LatLng(lat, long), //move to new location
+            position: LatLng(lat, long), //move to new location,
             icon: await getMarkerIcon(File(image!.path), 150.0)));
 
     setState(() {
@@ -285,6 +286,12 @@ class _WalkingView extends State<WalkingView> {
             Marker(
                 markerId: MarkerId("marker_position_${element.id}"),
                 position: LatLng(element.latitude, element.longitude), //move to new location
+                draggable: true,
+                onTap: () async{
+                  final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ScreenDetail(element.id))
+                  );},
                 icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)));
       });
     });
@@ -327,6 +334,8 @@ class _WalkingView extends State<WalkingView> {
     if (result == 1) setState(() => isSpeaking = TtsState.stopped);
   }
 
+
+
   void getCurrentLocation() async {
     GoogleMapController googleMapController = await _controller.future;
 
@@ -351,9 +360,10 @@ class _WalkingView extends State<WalkingView> {
 
       markers.add(//repopulate markers
           Marker(
-              markerId: MarkerId("current_user_position"),
-              position: LatLng(lat, long), //move to new location
-              icon: BitmapDescriptor.defaultMarker));
+            markerId: MarkerId("current_user_position"),
+            position: LatLng(lat, long), //move to new location
+            icon: BitmapDescriptor.defaultMarker),
+        );
       addPolyline();
 
       print("isSpeaking ${isSpeaking}");
@@ -455,6 +465,7 @@ class _WalkingView extends State<WalkingView> {
                                     target: LatLng(lat!, long!),
                                     zoom: 16.5,
                                   ),
+                                  myLocationButtonEnabled: false,
                                   markers: markers,
                                   polylines: _polylines,
                                   onMapCreated: (mapController) {
