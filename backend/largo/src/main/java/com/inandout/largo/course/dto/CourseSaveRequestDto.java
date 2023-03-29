@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class CourseSaveRequestDto {
-    private String email;
     private List<CoordinateDto> ls;
     private String total_time;
     private Double total_dist;
@@ -22,8 +21,7 @@ public class CourseSaveRequestDto {
     private List<String> user_picture;
 
     @Builder
-    public CourseSaveRequestDto(String email, List<CoordinateDto> ls, String total_time, Double total_dist, String map_picture, List<String> user_picture){
-        this.email = email;
+    public CourseSaveRequestDto(List<CoordinateDto> ls, String total_time, Double total_dist, String map_picture, List<String> user_picture){
         this.ls = ls;
         this.total_time = total_time;
         this.total_dist = total_dist;

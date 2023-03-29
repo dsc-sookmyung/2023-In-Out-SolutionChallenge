@@ -30,8 +30,8 @@ public class CourseService {
     private final UserPlaceRepository userPlaceRepository;
 
     @Transactional
-    public void save(CourseSaveRequestDto requestDto){
-        User user = userRepository.findByEmail(requestDto.getEmail())
+    public void save(CourseSaveRequestDto requestDto, String email){
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         LineString ls = getLineString(requestDto.getLs());
 

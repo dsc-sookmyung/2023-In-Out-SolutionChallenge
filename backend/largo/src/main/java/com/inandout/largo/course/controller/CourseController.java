@@ -16,8 +16,8 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping
-    public void saveCourse(@RequestBody CourseSaveRequestDto requestDto){
-        courseService.save(requestDto);
+    public void saveCourse(@RequestBody CourseSaveRequestDto requestDto, Principal principal){
+        courseService.save(requestDto, principal.getName());
     }
 
     @GetMapping
