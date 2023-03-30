@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:largo/models/place_model.dart';
 import 'package:largo/providers/detail_provider.dart';
 import 'package:largo/screen/screen_detail.dart';
-import 'package:largo/screen/screen_mypage.dart';
 import 'package:largo/screen/screen_search.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
@@ -44,7 +43,6 @@ class _HomeScreenState extends State<ScreenHome> {
   int _currentIndex2=0;
 
   List<String> Banners = [
-    'assets/images/Banner1.png',
     'assets/images/Banner2.png',
     'assets/images/Banner3.png',
     'assets/images/Banner4.png'];

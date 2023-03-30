@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:largo/color/themeColors.dart';
 import 'package:largo/screen/screen_home.dart';
 import 'package:largo/screen/screen_login.dart';
 import 'package:largo/screen/screen_mypage.dart';
@@ -50,9 +51,13 @@ class _MyappState extends State<ScreenMain>{
   }
 
   List<BottomNavigationBarItem> items = [
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home)),
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.group)),
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings))
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home, size: 22,),
+
+      label : '메인 화면'),
+    BottomNavigationBarItem(icon: Icon(Icons.hiking_rounded, size: 22),
+      label : '걷기'),
+    BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_fill, size: 22),
+        label : '마이 페이지')
   ];
   late TabController controller;
   @override
@@ -61,7 +66,9 @@ class _MyappState extends State<ScreenMain>{
     requestCameraPermission();
     
     return CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(items: items),
+        tabBar: CupertinoTabBar(items: items,
+        activeColor : mainColor,
+        inactiveColor: greyScale5,),
         tabBuilder: (context, index) {
           switch (index) {
             case 0:
