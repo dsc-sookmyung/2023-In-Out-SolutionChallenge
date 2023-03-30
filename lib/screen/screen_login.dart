@@ -132,7 +132,7 @@ class _LoginScreenState extends State<ScreenLogin> {
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 40),
                   width: double.infinity,
                   child: Text(
-                    '경험을 찾아서, Largo',
+                    '경험을 찾아서 Largo',
                     style: TextStyle(
                         color : Colors.white,
                         letterSpacing: -0.5,
@@ -215,9 +215,7 @@ class _LoginScreenState extends State<ScreenLogin> {
       final result = await FlutterWebAuth.authenticate(url: url, callbackUrlScheme: callbackUrlScheme);
       final route = Uri.parse(result).queryParameters['route'].toString();
       if(route == 'main'){
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ScreenMain()));
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
       logger.d('route ', route);      // 백엔드에서 보내준 링크 ex. largo.page.link://main?token={{token}}
 

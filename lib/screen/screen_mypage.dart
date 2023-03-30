@@ -25,7 +25,7 @@ class _MypageScreenState extends State<ScreenMypage> {
     UserModel userInfo;
     http.Response response;
     final user = await SharedPreferences.getInstance();
-    response = await http.get(Uri.parse('http://34.64.143.243:8080/api/v1/user'),headers: {
+    response = await http.get(Uri.parse('http://34.28.16.229:8080/api/v1/user'),headers: {
       // 임시, 로컬 저장소로 바꿔줘야 함.
       'X-Auth-Token': user.getString('token')??[].toString()
     });
@@ -56,7 +56,7 @@ class _MypageScreenState extends State<ScreenMypage> {
     List<dynamic> courseList =[];
     CourseModel termCourseModel;
     List data;
-    var url =  Uri.parse('http://34.64.143.243:8080/api/v1/courses');
+    var url =  Uri.parse('http://34.28.16.229:8080/api/v1/courses');
     print('log3');
     final user = await SharedPreferences.getInstance();
     response = await http.get(url,headers: {
@@ -88,7 +88,7 @@ class _MypageScreenState extends State<ScreenMypage> {
   Future <List <dynamic>> getAPI_record_picture() async {
     http.Response response;
     var data;
-    var url =  Uri.parse('http://34.64.143.243:8080/api/v1/courses/pictures');
+    var url =  Uri.parse('http://34.28.16.229:8080/api/v1/courses/pictures');
     final user = await SharedPreferences.getInstance();
     print('log2');
     response = await http.get(url,headers: {

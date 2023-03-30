@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screen/screen_home.dart';
+import '../screen/screen_main.dart';
 
 class SearchBar extends StatelessWidget{
   final TextEditingController _textController = new TextEditingController();
@@ -11,7 +12,6 @@ class SearchBar extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Container(
-      height: 200,
       color: Colors.lightGreenAccent,
       child: Column(
         children: [
@@ -23,7 +23,7 @@ class SearchBar extends StatelessWidget{
           onPressed:(){
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ScreenHome())
+                MaterialPageRoute(builder: (context) => ScreenMain())
             );
         }, icon: Icon(Icons.arrow_back_sharp),),
       ),
@@ -43,7 +43,7 @@ class SearchBar extends StatelessWidget{
           filled: true,
           fillColor: Color(0xfaffc977),
 
-          hintText: '검색할 장소를 입력해주세요',
+          hintText: '검색할 장소',
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(30)),
             borderSide: BorderSide(width: 3, color: Color(0xfaffc977)),
@@ -67,7 +67,7 @@ class SearchBar extends StatelessWidget{
           )
               : null,
         ),
-          cursorColor: Color(0xfaffc977),
+          cursorColor: Colors.black,
 
         ),
       ),
@@ -88,7 +88,7 @@ class SearchBar extends StatelessWidget{
             horizontal: 4.0,
             ),
           child: Container(
-            height: 50,
+            height: 80,
             width: 50,
             alignment: Alignment.center,
             child: Icon(
@@ -99,11 +99,11 @@ class SearchBar extends StatelessWidget{
         ),
       ],
       ),
+      // 모델 들어갈 자리
       Expanded(
       child: Container(
         alignment: Alignment.center,
         color: Colors.yellow[200],
-        child: _changedTextWidget,
         ),
       ),
       ],

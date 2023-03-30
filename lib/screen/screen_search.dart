@@ -46,46 +46,50 @@ class _SearchScreenState extends State<ScreenSearch> {
       ),
       home: Scaffold(
         backgroundColor: Color(0xffF5F5F5),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(74),
-          child: AppBar(
-              backgroundColor: Color(0xffF5F5F5),
-              leading:  IconButton(
-                color : Color(0xff645F5A),
-                onPressed:(){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ScreenMain())
-                  );
-                },
-                icon : Icon(Icons.arrow_back_sharp),
-              ),
-              centerTitle: true, // 제목 중앙정렬 허용
-              title: Container(
-                child:Container(
-                  margin: EdgeInsets.all(0),
-                  child: SearchBar(),
-                ),
-                ),
-
-              elevation: 0, // 그림자 없애기
-              shape : RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))
-              )
-
-          ),
-        ),
+        // appBar: PreferredSize(
+        //   preferredSize: Size.fromHeight(74),
+        //   child: AppBar(
+        //       backgroundColor: Color(0xffF5F5F5),
+        //       leading:  IconButton(
+        //         color : Color(0xff645F5A),
+        //         onPressed:(){
+        //           Navigator.push(
+        //               context,
+        //               MaterialPageRoute(builder: (context) => ScreenMain())
+        //           );
+        //         },
+        //         icon : Icon(Icons.arrow_back_sharp),
+        //       ),
+        //       centerTitle: true, // 제목 중앙정렬 허용
+        //       title: Container(
+        //
+        //         ),
+        //
+        //       elevation: 0, // 그림자 없애기
+        //       shape : RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))
+        //       )
+        //
+        //   ),
+        // ),
 
 
         body:
         Container(
           width :double.infinity,
-          margin: EdgeInsets.fromLTRB(23, 0, 23, 23),
-          child:   Column(
+          margin: EdgeInsets.fromLTRB(20,20, 23, 23),
+          child:   ListView(
             children :[
               Container(
-                margin: EdgeInsets.fromLTRB(0, 14, 0, 0),
-                child : SearchBar()
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child:Container(
+                    margin: EdgeInsets.all(0),
+                    child: Column(
+                        children :[
+                          SearchBar(),
+                          ]
+                    )
+                ),
               ),
 
 

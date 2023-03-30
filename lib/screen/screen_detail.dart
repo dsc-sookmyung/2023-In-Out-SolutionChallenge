@@ -28,7 +28,7 @@ class ScreenDetail extends StatelessWidget{
   ScreenDetail(@required this.homeData_id);
 
   Future <DetailModel> getJSONData() async {
-    var url = Uri.parse('http://34.64.143.243:8080/api/v1/places/${homeData_id}');
+    var url = Uri.parse('http://34.28.16.229:8080/api/v1/places/${homeData_id}');
     http.Response response;
     var data;
     List<DetailModel> details =[];
@@ -41,7 +41,7 @@ class ScreenDetail extends StatelessWidget{
       });
       data = await json.decode(utf8.decode(response.bodyBytes));
       detail = DetailModel(
-          placeId: data["place_name"].toString(),
+          placeId: data["place_id"].toString(),
           placeName: data["place_name"].toString(),
           addressNum: data["address_num"].toString(),
           addressName: data["address_name"].toString(),

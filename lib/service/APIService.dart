@@ -16,7 +16,7 @@ class APIService {
 
   Future<PlaceInfo> fetchPost(int placeId) async {
     final response =
-        await http.get('http://34.64.143.243:8080/api/v1/places/${placeId}' as Uri, headers: {'X-Auth-Token': tokenTest});
+        await http.get('http://34.28.16.229:8080/api/v1/places/${placeId}' as Uri, headers: {'X-Auth-Token': tokenTest});
 
     if (response.statusCode == 200) {
       // 만약 서버가 OK 응답을 반환하면, JSON을 파싱합니다.
@@ -29,7 +29,7 @@ class APIService {
 
   Future<List<MarkerInfo>> fetchMarkers() async {
     final response = await http
-        .get(Uri.parse('http://34.64.143.243:8080/api/v1/places'), headers: {'X-Auth-Token': tokenTest});
+        .get(Uri.parse('http://34.28.16.229:8080/api/v1/places'), headers: {'X-Auth-Token': tokenTest});
 
     if (response.statusCode == 200) {
       // 만약 서버가 OK 응답을 반환하면, JSON을 파싱합니다. 37.544808, 126.965539 37.545658, 126.964842
@@ -54,7 +54,7 @@ class APIService {
 
   Future<PlaceInfo> fetchPlaceInfo(double lat, double long, List<int> placeId) async {
     print("fetchPlaceInfo***********************************************");
-    var postUri = Uri.parse('http://34.64.143.243:8080/api/v1/places/search');
+    var postUri = Uri.parse('http://34.28.16.229:8080/api/v1/places/search');
     Map<String, dynamic> body = {"latitude": lat, "longitude": long,'exclusions': placeId};
 
     print(body.toString());
@@ -86,7 +86,7 @@ class APIService {
 
   Future<String> uploadImage(String path, Uint8List data) async {
     print("uploadImage***********************************************");
-    var postUri = Uri.parse('http://34.64.143.243:8080/api/v1/files');
+    var postUri = Uri.parse('http://34.28.16.229:8080/api/v1/files');
     //var request = http.MultipartRequest("POST", postUri);
 
     //request.headers['Accept'] = "application/json";
@@ -117,7 +117,7 @@ class APIService {
 
   Future<void> uploadRunData(List<LatLng> gps, String time, double dist, String map_picture, List<String> user_picture ) async {
     print("uploadRunData***********************************************");
-    var postUri = Uri.parse('http://34.64.143.243:8080/api/v1/courses');
+    var postUri = Uri.parse('http://34.28.16.229:8080/api/v1/courses');
 
     var gps_temp = [];
     for(int i = 0; i < gps.length; i++) {
@@ -149,7 +149,7 @@ class APIService {
   }
 
   Future <DetailModel> getPlaceData(int place_id) async {
-    var url = Uri.parse('http://34.64.143.243:8080/api/v1/places/${place_id}');
+    var url = Uri.parse('http://34.28.16.229:8080/api/v1/places/${place_id}');
     http.Response response;
     var data;
     List<DetailModel> details =[];

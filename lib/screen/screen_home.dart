@@ -85,7 +85,7 @@ class _HomeScreenState extends State<ScreenHome> {
 
     PlaceModel termPlaceModel;
     var data;
-    var url =  Uri.parse('http://34.64.143.243:8080/api/v1/places/top?latitude=${_lat}&longitude=${_long}');
+    var url =  Uri.parse('http://34.28.16.229:8080/api/v1/places/top?latitude=${_lat}&longitude=${_long}');
     //print('lat :${_lat} long:${_long}');
     final user = await SharedPreferences.getInstance();
     response = await http.get(url,headers: {
@@ -109,6 +109,7 @@ class _HomeScreenState extends State<ScreenHome> {
       }
       if(data["near"] == null){
         // near관련 ui 안 보이게 처리할 것.
+
       }else{
         for(int i = 0 ; i< data["near"].length ; i++){
           termPlaceModel = PlaceModel(
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<ScreenHome> {
     List<dynamic> MarketList = [];
     MarketModel termMarketModel;
     var data;
-    var url = Uri.parse('http://34.64.143.243:8080/api/v1/markets');
+    var url = Uri.parse('http://34.28.16.229:8080/api/v1/markets');
     final user = await SharedPreferences.getInstance();
     response = await http.get(url, headers: {
       // 임시, 로컬 저장소로 바꿔줘야 함.
