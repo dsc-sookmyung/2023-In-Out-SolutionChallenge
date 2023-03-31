@@ -25,7 +25,6 @@ import '../main.dart';
 
 class ScreenDetail extends StatelessWidget{
   final int homeData_id;
-
   ScreenDetail(@required this.homeData_id);
 
   Future <DetailModel> getJSONData() async {
@@ -64,8 +63,12 @@ class ScreenDetail extends StatelessWidget{
       rethrow;
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    Completer<GoogleMapController> _controller = Completer();
+    Set<Marker> markers = Set();
+
     return Scaffold(
       backgroundColor: Color(0xffF5F5F5),
       appBar: PreferredSize(
@@ -93,7 +96,6 @@ class ScreenDetail extends StatelessWidget{
         child:FutureBuilder<DetailModel>(
           future: getJSONData(), // a previously-obtained Future<String> or null
           builder: (BuildContext context, AsyncSnapshot <DetailModel>snapshot) {
-
             if (snapshot.hasError) {
               Text("${snapshot.error}");
             }else if (snapshot.hasData) {
@@ -211,6 +213,23 @@ class ScreenDetail extends StatelessWidget{
                       ),
                     ),
                     Container(
+                      child: GoogleMap(
+                        mapType: MapType.normal,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(double.parse(snapshot.data!.latitude), double.parse(snapshot.data!.longitude)),
+                          zoom: 14.5,
+                        ),
+                        myLocationButtonEnabled: false,
+                        markers: markers,
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                          markers.add(//repopulate markers
+                              Marker(
+                                  markerId: MarkerId("current_user_position"),
+                                  position: LatLng(double.parse(snapshot.data!.latitude), double.parse(snapshot.data!.longitude)), //move to new location
+                                  icon: BitmapDescriptor.defaultMarker));
+                          },
+                        ),
                       width : double.infinity,
                       padding: EdgeInsets.all(20),
                       height: 250,

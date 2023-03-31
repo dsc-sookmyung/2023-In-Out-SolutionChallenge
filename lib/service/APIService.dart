@@ -183,7 +183,7 @@ class APIService {
       rethrow;
     }
   }
-
+/*
   Future <List<MarketModel>> getAPI_market() async {
     http.Response response;
 
@@ -249,4 +249,6 @@ class APIService {
       throw Exception('Failed to load post');
     }
   }
+
+ */
 }

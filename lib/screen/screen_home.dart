@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:largo/models/place_model.dart';
 import 'package:largo/providers/detail_provider.dart';
 import 'package:largo/screen/screen_detail.dart';
 import 'package:largo/screen/screen_search.dart';
-import 'package:largo/service/APIService.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
@@ -37,26 +37,25 @@ class _HomeScreenState extends State<ScreenHome> {
   int termIndex  = 0;
   double _long =0;
   double _lat =0;
+
+
   List data = [];
   int _currentIndex=0;
   int _currentIndex2=0;
-  bool isFirstMarket = false;
-  bool isFirstPlace = false;
 
   List<String> Banners = [
     'assets/images/Banner2.png',
     'assets/images/Banner3.png',
     'assets/images/Banner4.png'];
-
-  List<MarketModel> Markets =[];
+  List<dynamic> Markets =[];
   List cardList=[
     Market1(),
     Market2(),
     Market3(),
     Market4()
   ];
-  late List<MarketModel> futureMarket;
-  late List<List<PlaceModel>> futurePlace;
+  late Future futurePlace;
+  late Future futureMarket;
 
   String nullPic (String uri){
     if (uri == "null"){
@@ -66,68 +65,107 @@ class _HomeScreenState extends State<ScreenHome> {
     }
   }
 
-  getPostion() async{
+  Future <void> getPostion() async{
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     _lat = position.latitude;
     _long = position.longitude;
+    logger.d('lat;;;;;;;;;;;;;;;;;;;', _lat);
+    logger.d('long;;;;;;;;;;;;;;;;;;', _long);
 
-    logger.d('GET LOCATION  : ${_lat} ${_long}');
   }
 
-  Future deley5min() async {
-    await Future.delayed(Duration(seconds: 20));
-  }
+  Future <List<dynamic>> getAPI_places_top() async {
+    http.Response response;
+    List<dynamic> places =[];
+    List<PlaceModel> placeTopList =[];
+    List<PlaceModel> placeNearList =[];
 
-  Future<List<MarketModel>> _getMarkets() async {
-    print("GET MARKET INFO status : ${isFirstMarket}");
-    if (isFirstMarket) {
-      await Future.delayed(Duration(minutes: 5)).then((value) {
-        print("GET MARKET INFO CALL - AWAIT");
-        futureMarket = APIService().getAPI_market() as List<MarketModel>;
-      });
-    }else {
-      print("GET MARKET INFO CALL - no AWAIT");
-      futureMarket = await APIService().getAPI_market();
-    }
-
-    logger.d("MARKET INFO - ${futureMarket[0].toString()}");
-    setState(() {
-      isFirstMarket = true;
+    PlaceModel termPlaceModel;
+    var data;
+    var url =  Uri.parse('http://34.28.16.229:8080/api/v1/places/top?latitude=${_lat}&longitude=${_long}');
+    //print('lat :${_lat} long:${_long}');
+    final user = await SharedPreferences.getInstance();
+    response = await http.get(url,headers: {
+      // 임시, 로컬 저장소로 바꿔줘야 함.
+      'X-Auth-Token': user.getString('token')??[].toString()
     });
 
-    return futureMarket;
-  }
+    try{
+      data = await json.decode(utf8.decode(response.bodyBytes));
+      // 전 지역 top5의 장소를 리스트에 저장하기 (place_model 형태)
 
-  Future<List<List<PlaceModel>>> _getPlace() async {
-    print("GET PLACE INFO status : ${isFirstPlace}");
-
-    if (isFirstPlace) {
-      await Future.delayed(Duration(minutes: 5)).then((value) {
-        print("GET PLACE INFO CALL - AWAIT");
-        futurePlace = APIService().getAPI_places_top(_lat, _long) as List<List<PlaceModel>>;
-      });
-    }else {
-      print("GET PLACE INFO CALL - no AWAIT");
-      futurePlace = await APIService().getAPI_places_top(_lat, _long);
-      print(futurePlace);
+      for(int i = 0 ; i< data["total"].length ; i++){
+        termPlaceModel = PlaceModel(
+            place_id: data["total"][i]["place_id"],
+            place_name: data["total"][i]["place_name"].toString(),
+            picture: data["total"][i]["picture"].toString(),
+            hashtags: data["total"][i]["hashtags"],
+            address: data["total"][i]["address"]);
+        placeTopList.add(termPlaceModel);
+      }
+      if(data["near"] == null){
+        // near관련 ui 안 보이게 처리할 것.
+        placeNearList = [];
+      }else{
+        for(int i = 0 ; i< 5 ; i++){
+          termPlaceModel = PlaceModel(
+              place_id: data["near"][i]["place_id"],
+              place_name: data["near"][i]["place_name"].toString(),
+              picture: data["near"][i]["picture"].toString(),
+              hashtags: data["near"][i]["hashtags"],
+              address: data["near"][i]["address"]);
+          placeNearList.add(termPlaceModel);
+        }
+      }
+      places.add(placeTopList);
+      places.add(placeNearList);
+    } catch(e){
+      print(e);
+      rethrow;
     }
+    return places;
 
-    logger.d("PLACE INFO - ${futurePlace[0].toString()} ${futurePlace[1].toString()}");
-    setState(() {
-      isFirstPlace = true;
-    });
-
-    return futurePlace;
   }
 
+  Future <List<dynamic>> getAPI_market() async {
+    http.Response response;
+    List<dynamic> MarketList = [];
+    MarketModel termMarketModel;
+    var data;
+    var url = Uri.parse('http://34.28.16.229:8080/api/v1/markets');
+    final user = await SharedPreferences.getInstance();
+    response = await http.get(url, headers: {
+      // 임시, 로컬 저장소로 바꿔줘야 함.
+      'X-Auth-Token': user.getString('token') ?? [].toString()
+    });
+    try {
+      data = await json.decode(utf8.decode(response.bodyBytes)) as List;
+      // 전 지역 top5의 장소를 리스트에 저장하기 (place_model 형태)
+      for (int i = 0; i < data.length; i++) {
+        termMarketModel = MarketModel(
+            market_id: data[i]["market_id"],
+            market_name: data[i]["market_name"].toString(),
+            address_name: data[i]["address_name"].toString(),
+            longitude: data[i]["longitude"],
+            latitude: data[i]["latitude"],
+            picture: data[i]["picture"].toString());
+        MarketList.add(termMarketModel);
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+    Markets = MarketList;
+
+    return MarketList;
+  }
   @override
   void initState() {
     super.initState();
-    getPostion();
-    isFirstMarket = false;
-    isFirstPlace = false;
+    getPostion().then((value) => futurePlace = getAPI_places_top());
+    futureMarket = getAPI_market();
   }
 
   @override
@@ -216,7 +254,9 @@ class _HomeScreenState extends State<ScreenHome> {
                                         fit : BoxFit.fitWidth
                                     ),
                                   ),
-                              ),
+
+
+                                ),
                               ),
                             );
                           }
@@ -239,359 +279,369 @@ class _HomeScreenState extends State<ScreenHome> {
                   ),
 //전지역
                   Container(
-                      child: FutureBuilder(
-                      future: _getPlace(), // a previously-obtained Future<String> or null
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          Text("${snapshot.error}");
-                        }else if (snapshot.hasData) {
-                          print(snapshot.data?[0]);
-                          // 주변 지역이 서비스 지역을 벗어난 경우 (전지역만)
-                          if(snapshot.data![1].length == 0){
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("전 지역, 관광 경험 TOP5",
-                                    style: TextStyle(
-                                        color : Color(0xff645F5A),
-                                        letterSpacing:-0.5,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700),
-                                    textAlign: TextAlign.center),
-                                Text("#색다른 #좋아할만한"
-                                    ,style: TextStyle(
-                                        color : Color(0xffF8A426),
-                                        letterSpacing:-0.5,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 30),
-                                  child: SizedBox(
-                                    height: 250,
+                      child: FutureBuilder<List<dynamic>>(
+                        future: getAPI_places_top(), // a previously-obtained Future<String> or null
+                        builder: (BuildContext context, AsyncSnapshot <List<dynamic>>snapshot) {
+                          if (snapshot.hasError) {
+                            Text("${snapshot.error}");
+                          }else if (snapshot.hasData) {
+                            // 주변 지역이 서비스 지역을 벗어난 경우 (전지역만)
+                            if(snapshot.data![1].length != 0){
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("전 지역, 관광 경험 TOP5",
+                                      style: TextStyle(
+                                          color : Color(0xff645F5A),
+                                          letterSpacing:-0.5,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.center),
+                                  Text("#색다른 #좋아할만한"
+                                      ,style: TextStyle(
+                                          color : Color(0xffF8A426),
+                                          letterSpacing:-0.5,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 30),
+                                    child: SizedBox(
+                                      height: 250,
 
-                                    child:
-                                    ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount : snapshot.data![0].length,
-                                        itemBuilder: (count, index){
-                                          return InkWell(
-                                            onTap:() async{
-                                              final result = await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => ScreenDetail(snapshot.data![0][index].place_id))
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                              width: 230,
-                                              height: 250,
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.3),
-                                                    spreadRadius: 4,
-                                                    blurRadius: 10,
-                                                    offset: Offset(0, 3), // changes position of shadow
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
+                                      child:
+                                      ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount : snapshot.data![0].length,
+                                          itemBuilder: (count, index){
+                                            return InkWell(
+                                              onTap:() async{
+                                                final result = await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ScreenDetail(snapshot.data![0][index].place_id))
+                                                );
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                                width: 230,
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.3),
+                                                      spreadRadius: 4,
+                                                      blurRadius: 10,
+                                                      offset: Offset(0, 3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
 
-                                                      width: 230,
-                                                      height: 160,
-                                                      decoration: BoxDecoration(
+                                                        width: 230,
+                                                        height: 160,
+                                                        decoration: BoxDecoration(
 
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.circular(10),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(nullPic(snapshot.data![0][index].picture as String)),
-                                                            fit : BoxFit.fitWidth
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(nullPic(snapshot.data![0][index].picture as String)),
+                                                              fit : BoxFit.fitWidth
+                                                          ),
                                                         ),
+
                                                       ),
 
-                                                    ),
+                                                      Container(
+                                                          margin: EdgeInsets.all(5),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
 
-                                                    Container(
-                                                        margin: EdgeInsets.all(5),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(snapshot.data![0][index].place_name
+                                                                ,style: TextStyle(
+                                                                    color : Color(0xff645F5A),
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 20.0,
+                                                                    fontWeight: FontWeight.w500),),
 
-                                                          children: [
-                                                            Text(snapshot.data![0][index].place_name
-                                                              ,style: TextStyle(
-                                                                  color : Color(0xff645F5A),
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 20.0,
-                                                                  fontWeight: FontWeight.w500),),
-
-                                                            Text(snapshot.data![0][index].address,
-                                                              style: TextStyle(
-                                                                  color : Colors.grey,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.w500),),
-                                                            Text("#${snapshot.data![0][index].hashtags[0]}  #${snapshot.data![0][index].hashtags[1]}  #${snapshot.data![0][index].hashtags[2]}",
-                                                              style: TextStyle(
-                                                                  color : Colors.grey,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.w500),),
-                                                          ],
-                                                        )
-                                                    ),
-                                                  ]
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                          // 주변 지역이 서비스 지역인 경우(전지역, 주변)
-                          else{
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("전 지역, 관광 경험 TOP5",
-                                    style: TextStyle(
-                                        color : Color(0xff645F5A),
-                                        letterSpacing:-0.5,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700),
-                                    textAlign: TextAlign.center),
-                                Text("#색다른 #좋아할만한"
-                                    ,style: TextStyle(
-                                        color : Color(0xffF8A426),
-                                        letterSpacing:-0.5,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 30),
-                                  child: SizedBox(
-                                    height: 250,
-
-                                    child:
-                                    ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount : snapshot.data![0].length,
-                                        itemBuilder: (count, index){
-                                          return InkWell(
-                                            onTap:() async{
-                                              final result = await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => ScreenDetail(snapshot.data![0][index].place_id))
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                              width: 230,
-                                              height: 250,
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.3),
-                                                    spreadRadius: 4,
-                                                    blurRadius: 10,
-                                                    offset: Offset(0, 3), // changes position of shadow
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-
-                                                      width: 230,
-                                                      height: 160,
-                                                      decoration: BoxDecoration(
-
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.circular(10),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(nullPic(snapshot.data![0][index].picture as String)),
-                                                            fit : BoxFit.fitWidth
-                                                        ),
+                                                              Text(snapshot.data![0][index].address,
+                                                                style: TextStyle(
+                                                                    color : Colors.grey,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.w500),),
+                                                              Text("#${snapshot.data![0][index].hashtags[0]}  #${snapshot.data![0][index].hashtags[1]}  #${snapshot.data![0][index].hashtags[2]}",
+                                                                style: TextStyle(
+                                                                    color : Colors.grey,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.w500),),
+                                                            ],
+                                                          )
                                                       ),
 
-                                                    ),
 
-                                                    Container(
-                                                        margin: EdgeInsets.all(5),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
 
-                                                          children: [
-                                                            Text(snapshot.data![0][index].place_name
-                                                              ,style: TextStyle(
-                                                                  color : Color(0xff645F5A),
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 20.0,
-                                                                  fontWeight: FontWeight.w500),),
-
-                                                            Text(snapshot.data![0][index].address,
-                                                              style: TextStyle(
-                                                                  color : Colors.grey,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.w500),),
-                                                            Text("#${snapshot.data![0][index].hashtags[0]}  #${snapshot.data![0][index].hashtags[1]}  #${snapshot.data![0][index].hashtags[2]}",
-                                                              style: TextStyle(
-                                                                  color : Colors.grey,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.w500),),
-                                                          ],
-                                                        )
-                                                    ),
+                                                    ]
+                                                ),
 
 
 
-                                                  ]
+
+
                                               ),
+                                            );
 
+                                          }),
 
-
-
-
-                                            ),
-                                          );
-
-                                        }),
-
+                                    ),
                                   ),
-                                ),
-                                // 근처
-                                Text(" 근처, 관광 경험 TOP5",
-                                    style: TextStyle(
-                                        color : Color(0xff645F5A),
-                                        letterSpacing:-0.5,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700),
-                                    textAlign: TextAlign.center),
-                                Text("#색다른 #좋아할만한"
-                                    ,style: TextStyle(
-                                        color : Color(0xffF8A426),
-                                        letterSpacing:-0.5,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 30),
-                                  child: SizedBox(
-                                    height: 250,
+                                ],
+                              );
+                            }
+                            // 주변 지역이 서비스 지역인 경우(전지역, 주변)
+                            else{
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("전 지역, 관광 경험 TOP5",
+                                      style: TextStyle(
+                                          color : Color(0xff645F5A),
+                                          letterSpacing:-0.5,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.center),
+                                  Text("#색다른 #좋아할만한"
+                                      ,style: TextStyle(
+                                          color : Color(0xffF8A426),
+                                          letterSpacing:-0.5,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 30),
+                                    child: SizedBox(
+                                      height: 250,
 
-                                    child:
-                                    ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount : snapshot.data![0].length,
-                                        itemBuilder: (count, index){
-                                          return InkWell(
-                                            onTap:() async{
-                                              final result = await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => ScreenDetail(snapshot.data![1][index].place_id))
-                                              );
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                              width: 230,
-                                              height: 250,
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.3),
-                                                    spreadRadius: 4,
-                                                    blurRadius: 10,
-                                                    offset: Offset(0, 3), // changes position of shadow
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
+                                      child:
+                                      ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount : snapshot.data![0].length,
+                                          itemBuilder: (count, index){
+                                            return InkWell(
+                                              onTap:() async{
+                                                final result = await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ScreenDetail(snapshot.data![0][index].place_id))
+                                                );
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                                width: 230,
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.3),
+                                                      spreadRadius: 4,
+                                                      blurRadius: 10,
+                                                      offset: Offset(0, 3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
 
-                                                      width: 230,
-                                                      height: 160,
-                                                      decoration: BoxDecoration(
+                                                        width: 230,
+                                                        height: 160,
+                                                        decoration: BoxDecoration(
 
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.circular(10),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(nullPic(snapshot.data![1][index].picture as String)),
-                                                            fit : BoxFit.fitWidth
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(nullPic(snapshot.data![0][index].picture as String)),
+                                                              fit : BoxFit.fitWidth
+                                                          ),
                                                         ),
+
                                                       ),
 
-                                                    ),
+                                                      Container(
+                                                          margin: EdgeInsets.all(5),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
 
-                                                    Container(
-                                                        margin: EdgeInsets.all(5),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(snapshot.data![0][index].place_name
+                                                                ,style: TextStyle(
+                                                                    color : Color(0xff645F5A),
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 20.0,
+                                                                    fontWeight: FontWeight.w500),),
 
-                                                          children: [
-                                                            Text(snapshot.data![1][index].place_name
-                                                              ,style: TextStyle(
-                                                                  color : Color(0xff645F5A),
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 20.0,
-                                                                  fontWeight: FontWeight.w500),),
-
-                                                            Text(snapshot.data![1][index].address,
-                                                              style: TextStyle(
-                                                                  color : Colors.grey,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.w500),),
-                                                            Text("#${snapshot.data![1][index].hashtags[0]}  #${snapshot.data![1][index].hashtags[1]}  #${snapshot.data![1][index].hashtags[2]}",
-                                                              style: TextStyle(
-                                                                  color : Colors.grey,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 14.0,
-                                                                  fontWeight: FontWeight.w500),),
-                                                          ],
-                                                        )
-                                                    ),
+                                                              Text(snapshot.data![0][index].address,
+                                                                style: TextStyle(
+                                                                    color : Colors.grey,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.w500),),
+                                                              Text("#${snapshot.data![0][index].hashtags[0]}  #${snapshot.data![0][index].hashtags[1]}  #${snapshot.data![0][index].hashtags[2]}",
+                                                                style: TextStyle(
+                                                                    color : Colors.grey,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.w500),),
+                                                            ],
+                                                          )
+                                                      ),
 
 
 
-                                                  ]
+                                                    ]
+                                                ),
+
+
+
+
+
                                               ),
+                                            );
 
+                                          }),
 
-
-
-
-                                            ),
-                                          );
-
-                                        }),
-
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          }
-                        };
+                                  // 근처
+                                  Text(" 근처, 관광 경험 TOP5",
+                                      style: TextStyle(
+                                          color : Color(0xff645F5A),
+                                          letterSpacing:-0.5,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.center),
+                                  Text("#색다른 #좋아할만한"
+                                      ,style: TextStyle(
+                                          color : Color(0xffF8A426),
+                                          letterSpacing:-0.5,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 30),
+                                    child: SizedBox(
+                                      height: 250,
 
-                        return CircularProgressIndicator();
-                      },
-                    )
+                                      child:
+                                      ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount : snapshot.data![0].length,
+                                          itemBuilder: (count, index){
+                                            return InkWell(
+                                              onTap:() async{
+                                                final result = await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ScreenDetail(snapshot.data![1][index].place_id))
+                                                );
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                                width: 230,
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.3),
+                                                      spreadRadius: 4,
+                                                      blurRadius: 10,
+                                                      offset: Offset(0, 3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+
+                                                        width: 230,
+                                                        height: 160,
+                                                        decoration: BoxDecoration(
+
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(nullPic(snapshot.data![1][index].picture as String)),
+                                                              fit : BoxFit.fitWidth
+                                                          ),
+                                                        ),
+
+                                                      ),
+
+                                                      Container(
+                                                          margin: EdgeInsets.all(5),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                                                            children: [
+                                                              Text(snapshot.data![1][index].place_name
+                                                                ,style: TextStyle(
+                                                                    color : Color(0xff645F5A),
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 20.0,
+                                                                    fontWeight: FontWeight.w500),),
+
+                                                              Text(snapshot.data![1][index].address,
+                                                                style: TextStyle(
+                                                                    color : Colors.grey,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.w500),),
+                                                              Text("#${snapshot.data![1][index].hashtags[0]}  #${snapshot.data![1][index].hashtags[1]}  #${snapshot.data![1][index].hashtags[2]}",
+                                                                style: TextStyle(
+                                                                    color : Colors.grey,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.w500),),
+                                                            ],
+                                                          )
+                                                      ),
+
+
+
+                                                    ]
+                                                ),
+
+
+
+
+
+                                              ),
+                                            );
+
+                                          }),
+
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          };
+
+                          return CircularProgressIndicator();
+                        },
+                      )
                   ),
+
 
 
                   Text("우리 동네 전통 시장",
@@ -612,119 +662,129 @@ class _HomeScreenState extends State<ScreenHome> {
                       textAlign: TextAlign.center),
 
 // 전통시장 컨텐츠
-/*
+
                   Container(
-                    child: FutureBuilder(
-                      future: _getMarkets(), // a previously-obtained Future<String> or null
-                      builder: (context, snapshot) {
+                      child: FutureBuilder<List<dynamic>>(
+                        future: getAPI_market(), // a previously-obtained Future<String> or null
+                        builder: (BuildContext context, AsyncSnapshot <List<dynamic>>snapshot) {
+                          if (snapshot.hasError) {
+                            Text("${snapshot.error}");
+                          }else if (snapshot.hasData) {
+                            return Column(
+                              children: [
+                                CarouselSlider(
+                                  options: CarouselOptions(
+                                    height: 250.0,
+                                    autoPlay: true,
+                                    autoPlayInterval: Duration(seconds: 3),
+                                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    pauseAutoPlayOnTouch: true,
+                                    viewportFraction: 1, // 슬라이더 안 보이게 함.
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _currentIndex = index;
+                                      });
+                                    },
+                                  ),
+                                  items: Markets.map((card){
+                                    return Builder(
+                                        builder:(BuildContext context){
+                                          return Container(
+                                            margin : EdgeInsets.fromLTRB(0, 12, 0, 14),
+                                            height: MediaQuery.of(context).size.height,
+                                            width: MediaQuery.of(context).size.width,
 
-                        if (snapshot.hasError) {
-                          Text("${snapshot.error}");
-                        }else if (snapshot.hasData) {
-                          return Column(
-                            children: [
-                              CarouselSlider(
-                                options: CarouselOptions(
-                                  height: 250.0,
-                                  autoPlay: true,
-                                  autoPlayInterval: Duration(seconds: 3),
-                                  autoPlayAnimationDuration: Duration(milliseconds: 800),
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  pauseAutoPlayOnTouch: true,
-                                  viewportFraction: 1, // 슬라이더 안 보이게 함.
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _currentIndex = index;
-                                    });
-                                  },
-                                ),
-                                items: snapshot.data?.map((card){
-                                  return Builder(
-                                      builder:(BuildContext context){
-                                        return Container(
-                                          margin : EdgeInsets.fromLTRB(0, 12, 0, 14),
-                                          height: MediaQuery.of(context).size.height,
-                                          width: MediaQuery.of(context).size.width,
-
-                                          child: Container(
-                                              width : 329,
-                                              height: 250,
-                                              decoration: BoxDecoration(
-                                                //color : Colors.red,
-                                                borderRadius: BorderRadius.circular(13),
-                                                image: DecorationImage(
-                                                    image: NetworkImage(nullPic(snapshot.data![_currentIndex].picture.toString())),
-                                                    fit : BoxFit.fitWidth
-                                                ),
-
-                                              ),
-                                              child: Stack(
-                                                children: [
-                                                  Opacity(opacity: 0.3,
-                                                    child: Container(
-                                                      width : double.infinity,
-                                                      height: 250,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.black,
-                                                          borderRadius: BorderRadius.circular(13)
-                                                      ),
-
-                                                    ),
+                                            child: Container(
+                                                width : 329,
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  //color : Colors.red,
+                                                  borderRadius: BorderRadius.circular(13),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(nullPic(Markets[_currentIndex].picture.toString())),
+                                                      fit : BoxFit.fitWidth
                                                   ),
-                                                  Container(
-                                                      padding: EdgeInsets.all(16),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(snapshot.data![_currentIndex].market_name.toString(),
-                                                              style: TextStyle(
-                                                                  color : Colors.white,
-                                                                  letterSpacing:-0.5,
-                                                                  fontSize: 20.0,
-                                                                  fontWeight: FontWeight.w500),
-                                                              textAlign: TextAlign.start),
-                                                          Text(snapshot.data![_currentIndex].address_name.toString(),
-                                                              style: TextStyle(
-                                                                  color : Colors.white,
-                                                                  letterSpacing: -0.5,
-                                                                  fontSize: 12.0,
-                                                                  fontWeight: FontWeight.w400),
-                                                              textAlign: TextAlign.start),
-                                                        ],))
-                                                ],
-                                              )
 
-                                          ),
-                                        );
-                                      }
-                                  );
-                                }).toList(),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: map<Widget>(snapshot.data!, (index, url) {
-                                  return Container(
-                                    width: 8.0,
-                                    height: 8.0,
-                                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: _currentIndex == index ? Color(0xff757575) : Colors.grey.shade400,
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ],
-                          );
-                        }
-                        return CircularProgressIndicator();
-                      },
-                    )
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Opacity(opacity: 0.3,
+                                                      child: Container(
+                                                        width : double.infinity,
+                                                        height: 250,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.black,
+                                                            borderRadius: BorderRadius.circular(13)
+                                                        ),
+
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                        padding: EdgeInsets.all(16),
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(Markets[_currentIndex].market_name.toString(),
+                                                                style: TextStyle(
+                                                                    color : Colors.white,
+                                                                    letterSpacing:-0.5,
+                                                                    fontSize: 20.0,
+                                                                    fontWeight: FontWeight.w500),
+                                                                textAlign: TextAlign.start),
+                                                            // Text('주민 추천 ${_currentIndex +1}위',
+                                                            //     style: TextStyle(
+                                                            //         color : Colors.white,
+                                                            //         letterSpacing: -0.5,
+                                                            //         fontSize: 12.0,
+                                                            //         fontWeight: FontWeight.w400),
+                                                            //     textAlign: TextAlign.start),
+                                                            Text(Markets[_currentIndex].address_name.toString(),
+                                                                style: TextStyle(
+                                                                    color : Colors.white,
+                                                                    letterSpacing: -0.5,
+                                                                    fontSize: 12.0,
+                                                                    fontWeight: FontWeight.w400),
+                                                                textAlign: TextAlign.start),
+                                                          ],
+
+
+                                                        )
+                                                    )
+                                                  ],
+                                                )
+
+                                            ),
+                                          );
+                                        }
+                                    );
+                                  }).toList(),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: map<Widget>(Markets, (index, url) {
+                                    return Container(
+                                      width: 8.0,
+                                      height: 8.0,
+                                      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _currentIndex == index ? Color(0xff757575) : Colors.grey.shade400,
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ],
+                            );
+
+
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      )
 
                   ),
-
- */
                 ],
               ),
             ],
@@ -740,7 +800,6 @@ class _HomeScreenState extends State<ScreenHome> {
 
 
 }
-
 
 
 

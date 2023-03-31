@@ -61,9 +61,9 @@ class _WalkingSettingView extends State<WalkingSettingView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getCurrentLocation();
     addPlaceMarkers();
     addMarkers();
-    getCurrentLocation();
     zoom = sliderVals[sliderContoller.sliderValue];
   }
 
