@@ -1,0 +1,514 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.largo"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="33" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:5:5-66
+15-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:5:22-64
+16    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+16-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:6:5-80
+16-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:6:22-78
+17    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+17-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:7:5-78
+17-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:7:22-76
+18    <uses-permission android:name="android.permission.CAMERA" />
+18-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:8:5-64
+18-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:8:22-62
+19    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+19-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:9:5-80
+19-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:9:22-78
+20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+20-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:10:5-79
+20-->/Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/android/app/src/main/AndroidManifest.xml:10:22-77
+21    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+21-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-77
+21-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-74
+22    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Include required permissions for Google Maps API to run. -->
+22-->[:camera_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/camera_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-71
+22-->[:camera_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/camera_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-68
+23    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+23-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:23:5-79
+23-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:23:22-76
+24
+25    <uses-feature
+25-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:26:5-28:35
+26        android:glEsVersion="0x00020000"
+26-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:27:9-41
+27        android:required="true" />
+27-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:28:9-32
+28
+29    <queries>
+29-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:30:5-34:15
+30
+31        <!-- Needs to be explicitly declared on Android R+ -->
+32        <package android:name="com.google.android.apps.maps" />
+32-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:33:9-64
+32-->[com.google.android.gms:play-services-maps:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5f209350cd838b9ce5bc8a0b2b5002ec/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:33:18-61
+33    </queries>
+34
+35    <uses-permission android:name="android.permission.WAKE_LOCK" />
+35-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:24:5-68
+35-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:24:22-65
+36    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+36-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:25:5-79
+36-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:25:22-76
+37    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+37-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:26:5-110
+37-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:26:22-107
+38
+39    <permission
+39-->[androidx.core:core:1.9.0] /Users/yejin/.gradle/caches/transforms-3/5d74e95fb0075f60337058ab4b4b1813/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+40        android:name="com.example.largo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+40-->[androidx.core:core:1.9.0] /Users/yejin/.gradle/caches/transforms-3/5d74e95fb0075f60337058ab4b4b1813/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+41        android:protectionLevel="signature" />
+41-->[androidx.core:core:1.9.0] /Users/yejin/.gradle/caches/transforms-3/5d74e95fb0075f60337058ab4b4b1813/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+42
+43    <uses-permission android:name="com.example.largo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+43-->[androidx.core:core:1.9.0] /Users/yejin/.gradle/caches/transforms-3/5d74e95fb0075f60337058ab4b4b1813/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+43-->[androidx.core:core:1.9.0] /Users/yejin/.gradle/caches/transforms-3/5d74e95fb0075f60337058ab4b4b1813/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+44
+45    <application
+46        android:name="android.app.Application"
+47        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+47-->[androidx.core:core:1.9.0] /Users/yejin/.gradle/caches/transforms-3/5d74e95fb0075f60337058ab4b4b1813/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+48        android:debuggable="true"
+49        android:icon="@mipmap/ic_launcher"
+50        android:label="largo"
+51        android:usesCleartextTraffic="true" >
+52        <meta-data
+53            android:name="com.google.android.geo.API_KEY"
+54            android:value="AIzaSyDF9j5N3EBwgDbbMMu6fYmEmKsjBUNpaUc" />
+55
+56        <uses-library
+57            android:name="org.apache.http.legacy"
+58            android:required="false" />
+59
+60        <activity
+61            android:name="com.example.largo.MainActivity"
+62            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+63            android:exported="true"
+64            android:hardwareAccelerated="true"
+65            android:launchMode="singleTop"
+66            android:theme="@style/LaunchTheme"
+67            android:windowSoftInputMode="adjustResize" >
+68
+69            <!--
+70                 Specifies an Android theme to apply to this Activity as soon as
+71                 the Android process has started. This theme is visible to the user
+72                 while the Flutter UI initializes. After that, this theme continues
+73                 to determine the Window background behind the Flutter UI.
+74            -->
+75            <meta-data
+76                android:name="io.flutter.embedding.android.NormalTheme"
+77                android:resource="@style/NormalTheme" />
+78            <meta-data
+79                android:name="flutter_deeplinking_enabled"
+80                android:value="true" />
+81
+82            <intent-filter>
+83                <action android:name="android.intent.action.MAIN" />
+84
+85                <category android:name="android.intent.category.LAUNCHER" />
+86            </intent-filter>
+87            <intent-filter android:autoVerify="true" >
+88                <action android:name="android.intent.action.VIEW" />
+88-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+88-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+89
+90                <category android:name="android.intent.category.DEFAULT" />
+90-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+90-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+91                <category android:name="android.intent.category.BROWSABLE" />
+91-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+91-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+92
+93                <data
+93-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:39:17-42:51
+94                    android:host="flutterbooksample.com"
+94-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:40:21-49
+95                    android:scheme="http" />
+95-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:42:21-48
+96                <data android:scheme="https" />
+96-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:39:17-42:51
+96-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:42:21-48
+97            </intent-filter>
+98
+99            <!-- For Dynamic links -->
+100            <intent-filter>
+101                <action android:name="android.intent.action.VIEW" />
+101-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+101-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+102
+103                <category android:name="android.intent.category.DEFAULT" />
+103-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+103-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+104                <category android:name="android.intent.category.BROWSABLE" />
+104-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+104-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+105
+106                <data
+106-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:39:17-42:51
+107                    android:host="largo.page.link"
+107-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:40:21-49
+108                    android:scheme="https" />
+108-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:42:21-48
+109            </intent-filter>
+110        </activity>
+111        <!-- <activity android:name="com.example.largo." android:exported="true"> -->
+112        <!-- <intent-filter android:label="flutter_web_auth"> -->
+113        <!-- <action android:name="android.intent.action.VIEW" /> -->
+114        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+115        <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+116        <!-- <data android:scheme="YOUR_CALLBACK_URL_SCHEME_HERE" /> -->
+117        <!-- </intent-filter> -->
+118        <!-- </activity> -->
+119
+120        <activity
+121            android:name="com.linusu.flutter_web_auth.CallbackActivity"
+122            android:exported="true" >
+123            <intent-filter
+124                android:autoVerify="true"
+125                android:label="flutter_web_auth" >
+126                <action android:name="android.intent.action.VIEW" />
+126-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+126-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+127
+128                <category android:name="android.intent.category.DEFAULT" />
+128-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+128-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+129                <category android:name="android.intent.category.BROWSABLE" />
+129-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+129-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+130
+131                <data android:scheme="largo.page.link" />
+131-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:39:17-42:51
+131-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:42:21-48
+132            </intent-filter>
+133        </activity>
+134
+135        <!--
+136             Don't delete the meta-data below.
+137             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+138        -->
+139        <meta-data
+140            android:name="flutterEmbedding"
+141            android:value="2" />
+142
+143        <service
+143-->[:firebase_dynamic_links] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_dynamic_links/intermediates/merged_manifest/debug/AndroidManifest.xml:12:9-16:19
+144            android:name="com.google.firebase.components.ComponentDiscoveryService"
+144-->[:firebase_dynamic_links] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_dynamic_links/intermediates/merged_manifest/debug/AndroidManifest.xml:12:18-89
+145            android:directBootAware="true"
+145-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:34:13-43
+146            android:exported="false" >
+146-->[com.google.firebase:firebase-analytics-ktx:21.2.0] /Users/yejin/.gradle/caches/transforms-3/156c632989a91ffdce3e66f1244b7419/transformed/jetified-firebase-analytics-ktx-21.2.0/AndroidManifest.xml:10:13-37
+147            <meta-data
+147-->[:firebase_dynamic_links] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_dynamic_links/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:85
+148                android:name="com.google.firebase.components:io.flutter.plugins.firebase.dynamiclinks.FlutterFirebaseAppRegistrar"
+148-->[:firebase_dynamic_links] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_dynamic_links/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-131
+149                android:value="com.google.firebase.components.ComponentRegistrar" />
+149-->[:firebase_dynamic_links] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_dynamic_links/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-82
+150            <meta-data
+150-->[:firebase_core] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+151                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+151-->[:firebase_core] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-124
+152                android:value="com.google.firebase.components.ComponentRegistrar" />
+152-->[:firebase_core] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
+153            <meta-data
+153-->[com.google.firebase:firebase-analytics-ktx:21.2.0] /Users/yejin/.gradle/caches/transforms-3/156c632989a91ffdce3e66f1244b7419/transformed/jetified-firebase-analytics-ktx-21.2.0/AndroidManifest.xml:11:13-13:85
+154                android:name="com.google.firebase.components:com.google.firebase.analytics.ktx.FirebaseAnalyticsKtxRegistrar"
+154-->[com.google.firebase:firebase-analytics-ktx:21.2.0] /Users/yejin/.gradle/caches/transforms-3/156c632989a91ffdce3e66f1244b7419/transformed/jetified-firebase-analytics-ktx-21.2.0/AndroidManifest.xml:12:17-126
+155                android:value="com.google.firebase.components.ComponentRegistrar" />
+155-->[com.google.firebase:firebase-analytics-ktx:21.2.0] /Users/yejin/.gradle/caches/transforms-3/156c632989a91ffdce3e66f1244b7419/transformed/jetified-firebase-analytics-ktx-21.2.0/AndroidManifest.xml:13:17-82
+156            <meta-data
+156-->[com.google.firebase:firebase-auth-ktx:21.1.0] /Users/yejin/.gradle/caches/transforms-3/964dbf5228671901096c30709ee1d728/transformed/jetified-firebase-auth-ktx-21.1.0/AndroidManifest.xml:11:13-13:85
+157                android:name="com.google.firebase.components:com.google.firebase.auth.ktx.FirebaseAuthKtxRegistrar"
+157-->[com.google.firebase:firebase-auth-ktx:21.1.0] /Users/yejin/.gradle/caches/transforms-3/964dbf5228671901096c30709ee1d728/transformed/jetified-firebase-auth-ktx-21.1.0/AndroidManifest.xml:12:17-116
+158                android:value="com.google.firebase.components.ComponentRegistrar" />
+158-->[com.google.firebase:firebase-auth-ktx:21.1.0] /Users/yejin/.gradle/caches/transforms-3/964dbf5228671901096c30709ee1d728/transformed/jetified-firebase-auth-ktx-21.1.0/AndroidManifest.xml:13:17-82
+159            <meta-data
+159-->[com.google.firebase:firebase-common-ktx:20.3.1] /Users/yejin/.gradle/caches/transforms-3/1f1efb11136810931cd0bbc6893424e3/transformed/jetified-firebase-common-ktx-20.3.1/AndroidManifest.xml:14:13-16:85
+160                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
+160-->[com.google.firebase:firebase-common-ktx:20.3.1] /Users/yejin/.gradle/caches/transforms-3/1f1efb11136810931cd0bbc6893424e3/transformed/jetified-firebase-common-ktx-20.3.1/AndroidManifest.xml:15:17-113
+161                android:value="com.google.firebase.components.ComponentRegistrar" />
+161-->[com.google.firebase:firebase-common-ktx:20.3.1] /Users/yejin/.gradle/caches/transforms-3/1f1efb11136810931cd0bbc6893424e3/transformed/jetified-firebase-common-ktx-20.3.1/AndroidManifest.xml:16:17-82
+162            <meta-data
+162-->[com.google.firebase:firebase-dynamic-links:21.1.0] /Users/yejin/.gradle/caches/transforms-3/143fc258cb6196b30317168a864b7124/transformed/jetified-firebase-dynamic-links-21.1.0/AndroidManifest.xml:26:13-28:85
+163                android:name="com.google.firebase.components:com.google.firebase.dynamiclinks.internal.FirebaseDynamicLinkRegistrar"
+163-->[com.google.firebase:firebase-dynamic-links:21.1.0] /Users/yejin/.gradle/caches/transforms-3/143fc258cb6196b30317168a864b7124/transformed/jetified-firebase-dynamic-links-21.1.0/AndroidManifest.xml:27:17-133
+164                android:value="com.google.firebase.components.ComponentRegistrar" />
+164-->[com.google.firebase:firebase-dynamic-links:21.1.0] /Users/yejin/.gradle/caches/transforms-3/143fc258cb6196b30317168a864b7124/transformed/jetified-firebase-dynamic-links-21.1.0/AndroidManifest.xml:28:17-82
+165            <meta-data
+165-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:67:13-69:85
+166                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+166-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:68:17-109
+167                android:value="com.google.firebase.components.ComponentRegistrar" />
+167-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:69:17-82
+168            <meta-data
+168-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:31:13-33:85
+169                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+169-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:32:17-139
+170                android:value="com.google.firebase.components.ComponentRegistrar" />
+170-->[com.google.android.gms:play-services-measurement-api:21.2.0] /Users/yejin/.gradle/caches/transforms-3/b0fc1b2918219c9a7b28afa3f6cbabc5/transformed/jetified-play-services-measurement-api-21.2.0/AndroidManifest.xml:33:17-82
+171            <meta-data
+171-->[com.google.firebase:firebase-installations:17.1.3] /Users/yejin/.gradle/caches/transforms-3/984bb6232f18c5f046bd81aceaf2d212/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:17:13-19:85
+172                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+172-->[com.google.firebase:firebase-installations:17.1.3] /Users/yejin/.gradle/caches/transforms-3/984bb6232f18c5f046bd81aceaf2d212/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:18:17-127
+173                android:value="com.google.firebase.components.ComponentRegistrar" />
+173-->[com.google.firebase:firebase-installations:17.1.3] /Users/yejin/.gradle/caches/transforms-3/984bb6232f18c5f046bd81aceaf2d212/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:19:17-82
+174        </service>
+175        <service
+175-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:9-16:56
+176            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+176-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-77
+177            android:enabled="true"
+177-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-35
+178            android:exported="false"
+178-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-37
+179            android:foregroundServiceType="location" />
+179-->[:geolocator_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-53
+180
+181        <provider
+181-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+182            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+182-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-82
+183            android:authorities="com.example.largo.flutter.image_provider"
+183-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-74
+184            android:exported="false"
+184-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+185            android:grantUriPermissions="true" >
+185-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+186            <meta-data
+186-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:75
+187                android:name="android.support.FILE_PROVIDER_PATHS"
+187-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+188                android:resource="@xml/flutter_image_picker_file_paths" />
+188-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-72
+189        </provider>
+190
+191        <activity
+191-->[:url_launcher_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+192            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+192-->[:url_launcher_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+193            android:exported="false"
+193-->[:url_launcher_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+194            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+194-->[:url_launcher_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+195        <!--
+196           Declares a provider which allows us to store files to share in
+197           '.../caches/share_plus' and grant the receiving action access
+198        -->
+199        <provider
+199-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:15:9-23:20
+200            android:name="dev.fluttercommunity.plus.share.ShareFileProvider"
+200-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-77
+201            android:authorities="com.example.largo.flutter.share_provider"
+201-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-74
+202            android:exported="false"
+202-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-37
+203            android:grantUriPermissions="true" >
+203-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:19:13-47
+204            <meta-data
+204-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:75
+205                android:name="android.support.FILE_PROVIDER_PATHS"
+205-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+206                android:resource="@xml/flutter_share_file_paths" />
+206-->[:image_picker_android] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-72
+207        </provider>
+208        <!--
+209           This manifest declared broadcast receiver allows us to use an explicit
+210           Intent when creating a PendingItent to be informed of the user's choice
+211        -->
+212        <receiver
+212-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:28:9-34:20
+213            android:name="dev.fluttercommunity.plus.share.SharePlusPendingIntent"
+213-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-82
+214            android:exported="true" >
+214-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:30:13-36
+215            <intent-filter>
+215-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:31:13-33:29
+216                <action android:name="EXTRA_CHOSEN_COMPONENT" />
+216-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:32:17-65
+216-->[:share_plus] /Users/yejin/Documents/Projects/2023-In-Out-SolutionChallenge-server/build/share_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:32:25-62
+217            </intent-filter>
+218        </receiver>
+219
+220        <activity
+220-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:23:9-27:75
+221            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+221-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:24:13-93
+222            android:excludeFromRecents="true"
+222-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:25:13-46
+223            android:exported="false"
+223-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:26:13-37
+224            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+224-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:27:13-72
+225        <!--
+226            Service handling Google Sign-In user revocation. For apps that do not integrate with
+227            Google Sign-In, this service will never be started.
+228        -->
+229        <service
+229-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:33:9-37:51
+230            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+230-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:34:13-89
+231            android:exported="true"
+231-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:35:13-36
+232            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+232-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:36:13-107
+233            android:visibleToInstantApps="true" />
+233-->[com.google.android.gms:play-services-auth:20.4.1] /Users/yejin/.gradle/caches/transforms-3/8d100a0e42fd03f716f5a8eeca34f74a/transformed/jetified-play-services-auth-20.4.1/AndroidManifest.xml:37:13-48
+234
+235        <activity
+235-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:27:9-44:20
+236            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+236-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:28:13-80
+237            android:excludeFromRecents="true"
+237-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:29:13-46
+238            android:exported="true"
+238-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:30:13-36
+239            android:launchMode="singleTask"
+239-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:31:13-44
+240            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+240-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:32:13-72
+241            <intent-filter>
+241-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:33:13-43:29
+242                <action android:name="android.intent.action.VIEW" />
+242-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+242-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+243
+244                <category android:name="android.intent.category.DEFAULT" />
+244-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+244-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+245                <category android:name="android.intent.category.BROWSABLE" />
+245-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+245-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+246
+247                <data
+247-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:39:17-42:51
+248                    android:host="firebase.auth"
+248-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:40:21-49
+249                    android:path="/"
+249-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:41:21-37
+250                    android:scheme="genericidp" />
+250-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:42:21-48
+251            </intent-filter>
+252        </activity>
+253        <activity
+253-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:45:9-62:20
+254            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+254-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:46:13-79
+255            android:excludeFromRecents="true"
+255-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:47:13-46
+256            android:exported="true"
+256-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:48:13-36
+257            android:launchMode="singleTask"
+257-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:49:13-44
+258            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+258-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:50:13-72
+259            <intent-filter>
+259-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:51:13-61:29
+260                <action android:name="android.intent.action.VIEW" />
+260-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:17-69
+260-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:34:25-66
+261
+262                <category android:name="android.intent.category.DEFAULT" />
+262-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:17-76
+262-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:36:27-73
+263                <category android:name="android.intent.category.BROWSABLE" />
+263-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:17-78
+263-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:37:27-75
+264
+265                <data
+265-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:39:17-42:51
+266                    android:host="firebase.auth"
+266-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:40:21-49
+267                    android:path="/"
+267-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:41:21-37
+268                    android:scheme="recaptcha" />
+268-->[com.google.firebase:firebase-auth:21.1.0] /Users/yejin/.gradle/caches/transforms-3/71efad79ca83c294ea4ce0516d8d0153/transformed/jetified-firebase-auth-21.1.0/AndroidManifest.xml:42:21-48
+269            </intent-filter>
+270        </activity>
+271
+272        <provider
+272-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:25:9-30:39
+273            android:name="com.google.firebase.provider.FirebaseInitProvider"
+273-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:26:13-77
+274            android:authorities="com.example.largo.firebaseinitprovider"
+274-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:27:13-72
+275            android:directBootAware="true"
+275-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:28:13-43
+276            android:exported="false"
+276-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:29:13-37
+277            android:initOrder="100" />
+277-->[com.google.firebase:firebase-common:20.3.1] /Users/yejin/.gradle/caches/transforms-3/967845a70d81144b4b229444d854a9e6/transformed/jetified-firebase-common-20.3.1/AndroidManifest.xml:30:13-36
+278
+279        <activity
+279-->[com.google.android.gms:play-services-base:18.1.0] /Users/yejin/.gradle/caches/transforms-3/f4c0500116144bc04cff0b0b27625b15/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+280            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+280-->[com.google.android.gms:play-services-base:18.1.0] /Users/yejin/.gradle/caches/transforms-3/f4c0500116144bc04cff0b0b27625b15/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+281            android:exported="false"
+281-->[com.google.android.gms:play-services-base:18.1.0] /Users/yejin/.gradle/caches/transforms-3/f4c0500116144bc04cff0b0b27625b15/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+282            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+282-->[com.google.android.gms:play-services-base:18.1.0] /Users/yejin/.gradle/caches/transforms-3/f4c0500116144bc04cff0b0b27625b15/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+283
+284        <receiver
+284-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:29:9-33:20
+285            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+285-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:30:13-85
+286            android:enabled="true"
+286-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:31:13-35
+287            android:exported="false" >
+287-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:32:13-37
+288        </receiver>
+289
+290        <service
+290-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:35:9-38:40
+291            android:name="com.google.android.gms.measurement.AppMeasurementService"
+291-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:36:13-84
+292            android:enabled="true"
+292-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:37:13-35
+293            android:exported="false" />
+293-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:38:13-37
+294        <service
+294-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:39:9-43:72
+295            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+295-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:40:13-87
+296            android:enabled="true"
+296-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:41:13-35
+297            android:exported="false"
+297-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:42:13-37
+298            android:permission="android.permission.BIND_JOB_SERVICE" />
+298-->[com.google.android.gms:play-services-measurement:21.2.0] /Users/yejin/.gradle/caches/transforms-3/361af9f73dc31467435c2fd02177f48b/transformed/jetified-play-services-measurement-21.2.0/AndroidManifest.xml:43:13-69
+299
+300        <meta-data
+300-->[com.google.android.gms:play-services-basement:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5eaba1f028ac62aaabee71faac8d9308/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+301            android:name="com.google.android.gms.version"
+301-->[com.google.android.gms:play-services-basement:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5eaba1f028ac62aaabee71faac8d9308/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+302            android:value="@integer/google_play_services_version" />
+302-->[com.google.android.gms:play-services-basement:18.1.0] /Users/yejin/.gradle/caches/transforms-3/5eaba1f028ac62aaabee71faac8d9308/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+303
+304        <uses-library
+304-->[androidx.window:window:1.0.0-beta04] /Users/yejin/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+305            android:name="androidx.window.extensions"
+305-->[androidx.window:window:1.0.0-beta04] /Users/yejin/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+306            android:required="false" />
+306-->[androidx.window:window:1.0.0-beta04] /Users/yejin/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+307        <uses-library
+307-->[androidx.window:window:1.0.0-beta04] /Users/yejin/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+308            android:name="androidx.window.sidecar"
+308-->[androidx.window:window:1.0.0-beta04] /Users/yejin/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+309            android:required="false" />
+309-->[androidx.window:window:1.0.0-beta04] /Users/yejin/.gradle/caches/transforms-3/003a22a5515e1f77f89701a46efbc2ec/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+310    </application>
+311
+312</manifest>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">624767437193-5ndvvkac7shf72iheslff0m5k8glar8h.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">624767437193</string>
+    <string name="google_api_key" translatable="false">AIzaSyBzBv3b-wXxkm6uX4ydFGa7GWA2Las5cJU</string>
+    <string name="google_app_id" translatable="false">1:624767437193:android:80766918e227e599b43958</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBzBv3b-wXxkm6uX4ydFGa7GWA2Las5cJU</string>
+    <string name="google_storage_bucket" translatable="false">largo-208ca.appspot.com</string>
+    <string name="project_id" translatable="false">largo-208ca</string>
+</resources>
