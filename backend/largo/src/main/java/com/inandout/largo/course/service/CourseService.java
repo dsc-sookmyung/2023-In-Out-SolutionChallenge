@@ -40,6 +40,7 @@ public class CourseService {
             userPlaceRepository.save(requestDto.toUPEntity(user, course, requestDto.getUser_picture().get(i)));
         }
 
+        user.addReward();
         log.info("save course {}", course.getId());
     }
 

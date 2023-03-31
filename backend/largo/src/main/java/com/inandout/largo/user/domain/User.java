@@ -51,6 +51,10 @@ public class User {
         return this;
     }
 
+    public void addReward(){
+        this.reward += 1;
+    }
+
     public String getRoleKey(){
         return this.role.getKey();
     }
