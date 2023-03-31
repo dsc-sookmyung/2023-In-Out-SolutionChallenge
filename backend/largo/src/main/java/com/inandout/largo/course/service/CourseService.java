@@ -4,9 +4,10 @@ import com.inandout.largo.course.domain.Course;
 import com.inandout.largo.course.domain.CourseRepository;
 import com.inandout.largo.course.dto.CourseSaveRequestDto;
 import com.inandout.largo.course.dto.CoordinateDto;
+import com.inandout.largo.course.dto.CoursesListResponseDto;
 import com.inandout.largo.exception.CustomException;
 import com.inandout.largo.exception.ErrorCode;
-import com.inandout.largo.place.domain.UserPlaceRepository;
+import com.inandout.largo.course.domain.UserPlaceRepository;
 import com.inandout.largo.user.domain.User;
 import com.inandout.largo.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +30,9 @@ public class CourseService {
     private final UserPlaceRepository userPlaceRepository;
 
     @Transactional
-    public void save(CourseSaveRequestDto requestDto){
-        User user = userRepository.findById(requestDto.getUser_id())
+    public void save(CourseSaveRequestDto requestDto, String email){
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if(requestDto.getLs().isEmpty()) throw new CustomException(ErrorCode.LACK_OF_INFORMATION);
         LineString ls = getLineString(requestDto.getLs());
 
         Course course = courseRepository.save(requestDto.toCourseEntity(user, ls));
@@ -40,6 +40,7 @@ public class CourseService {
             userPlaceRepository.save(requestDto.toUPEntity(user, course, requestDto.getUser_picture().get(i)));
         }
 
+        user.addReward();
         log.info("save course {}", course.getId());
     }
 
@@ -53,5 +54,17 @@ public class CourseService {
         log.info(lineString.toString());
 
         return lineString;
+    }
+
+    @Transactional
+    public List<CoursesListResponseDto> findAllCourses(String email){
+        return courseRepository.findAllByUser(email).stream()
+                .map(CoursesListResponseDto::new)
+                .toList();
+    }
+
+    @Transactional
+    public List<String> findAllPictures(String email){
+        return userPlaceRepository.findAllByUser(email);
     }
 }

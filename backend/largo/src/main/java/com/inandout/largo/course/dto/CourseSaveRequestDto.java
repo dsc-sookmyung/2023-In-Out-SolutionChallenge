@@ -1,19 +1,19 @@
 package com.inandout.largo.course.dto;
 
 import com.inandout.largo.course.domain.Course;
-import com.inandout.largo.place.domain.UserPlace;
+import com.inandout.largo.course.domain.UserPlace;
 import com.inandout.largo.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
 import org.locationtech.jts.geom.LineString;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class CourseSaveRequestDto {
-    private Long user_id;
     private List<CoordinateDto> ls;
     private String total_time;
     private Double total_dist;
@@ -21,8 +21,7 @@ public class CourseSaveRequestDto {
     private List<String> user_picture;
 
     @Builder
-    public CourseSaveRequestDto(Long user_id, List<CoordinateDto> ls, String total_time, Double total_dist, String map_picture, List<String> user_picture){
-        this.user_id = user_id;
+    public CourseSaveRequestDto(List<CoordinateDto> ls, String total_time, Double total_dist, String map_picture, List<String> user_picture){
         this.ls = ls;
         this.total_time = total_time;
         this.total_dist = total_dist;
@@ -37,6 +36,7 @@ public class CourseSaveRequestDto {
                 .picture(map_picture)
                 .totalTime(total_time)
                 .totalDist(total_dist)
+                .createdDate(LocalDate.now().toString())
                 .build();
     }
 

@@ -1,6 +1,5 @@
-package com.inandout.largo.place.domain;
+package com.inandout.largo.course.domain;
 
-import com.inandout.largo.course.domain.Course;
 import com.inandout.largo.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Builder;

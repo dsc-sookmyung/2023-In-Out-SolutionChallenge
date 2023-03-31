@@ -26,7 +26,6 @@ public class FileController {
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFile(@RequestPart MultipartFile file, HttpServletRequest request) throws IOException {
-        System.out.println("request"+file+" "+request.getParameter("path"));
         return ResponseEntity.ok(fileService.uploadFile(file, request.getParameter("path")));
     }
 }

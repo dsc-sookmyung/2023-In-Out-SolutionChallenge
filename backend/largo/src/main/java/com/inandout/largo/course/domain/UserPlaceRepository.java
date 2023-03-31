@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CourseRepository extends JpaRepository<Course, Long> {
-    @Query("select c from Course c where c.user.email=:email order by c.id desc")
-    List<Course> findAllByUser(@Param("email") String email);
+public interface UserPlaceRepository extends JpaRepository<UserPlace, Long> {
+    @Query("select up.picture from UserPlace up where up.user.email=:email order by up.id desc")
+    List<String> findAllByUser(@Param("email") String email);
 }
