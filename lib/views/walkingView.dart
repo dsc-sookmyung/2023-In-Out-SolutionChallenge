@@ -48,7 +48,7 @@ import 'package:http/http.dart' as http;
 import '../models/PlaceInfo.dart';
 import '../screen/screen_detail.dart';
 
-enum TtsState { playing, stopped, paused, continued}
+enum TtsState { ready, playing, stopped, paused, continued, complited}
 
 class WalkingView extends StatefulWidget {
   @override
@@ -63,7 +63,7 @@ class _WalkingView extends State<WalkingView> {
   final FlutterTts tts = FlutterTts();
   final TextEditingController textEditingController =
   TextEditingController(text: 'Hello world');
-  var isSpeaking = TtsState.stopped;
+  var isSpeaking = TtsState.ready;
 
   Set<Marker> markers = Set(); //markers for google map
   var mymarkers = [];
@@ -147,7 +147,7 @@ class _WalkingView extends State<WalkingView> {
     getCurrentLocation();
     start();
     tts.setLanguage('kr');
-    tts.setSpeechRate(0.5);
+    tts.setSpeechRate(0.6);
     tts.setVolume(1.4);
     // Camera
     //getCamera();
@@ -164,7 +164,7 @@ class _WalkingView extends State<WalkingView> {
     // TODO: implement dispose
     sub?.cancel();
     stop();
-    tts.stop();
+    _stop();
     _controller.complete();
     super.dispose();
   }
@@ -277,7 +277,7 @@ class _WalkingView extends State<WalkingView> {
     return BitmapDescriptor.fromBytes(uint8List!);
   }
 
-  addPlaceMarkers() {
+  addPlaceMarkers() async {
     APIService().fetchMarkers().then((val){
       print("Marker info ${val[0].longitude}");
       val.forEach((element) {
@@ -324,9 +324,11 @@ class _WalkingView extends State<WalkingView> {
   }
 
   Future _speak(String text) async{
-    var result = await tts.speak(text);
-    print("TTS Result : ${result}, ${isSpeaking}");
-    if (result == 1) setState(() => isSpeaking = TtsState.playing);
+    if(isSpeaking != TtsState.stopped) {
+      var result = await tts.speak(text);
+      print("TTS Result : ${result}, ${isSpeaking}");
+      if (result == 1) setState(() => isSpeaking = TtsState.playing);
+    }
   }
 
   Future _stop() async{
@@ -370,11 +372,11 @@ class _WalkingView extends State<WalkingView> {
 
       tts.setCompletionHandler(() {
         setState(() {
-          isSpeaking = TtsState.stopped;
+          isSpeaking = TtsState.complited;
         });
       });
 
-      if(isSpeaking != TtsState.playing){
+      if(isSpeaking != TtsState.stopped){
         explain = await APIService().fetchPlaceInfo(lat, long, explainExlusive);
         _speak(explain.info);
         explainExlusive.add(explain.id);
@@ -572,14 +574,17 @@ class _WalkingView extends State<WalkingView> {
                               ),
                               onTap: () {
                                 print("그만 걷기 ");
-                                sub?.pause();
+                                _stop();
+                                stop();
                                 calcTotalDistance();
                                 takeSnapShot();
+
+                                sub?.cancel();
 
                                 Future.delayed(Duration(seconds: 2), () {
                                 print("total Distance ${totalDistance} ${map_snapshot} ${timeString} ${totalDistance} ${polylineCoordinates} ${images}");
                                 Navigator.pushNamedAndRemoveUntil(
-                                    context, '/warking/warkingDone',
+                                    context, '/walking/walkingDone',
                                         (route) => false,
                                     arguments: WalkingDoneViewArguments(
                                         map_snapshot,

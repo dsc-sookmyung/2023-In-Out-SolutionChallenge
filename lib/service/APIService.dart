@@ -8,8 +8,11 @@ import 'package:http/http.dart' as http;
 // models
 import 'package:largo/models/PlaceInfo.dart';
 import 'package:largo/models/MarkerInfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/detail_model.dart';
+import '../models/market_model.dart';
+import '../models/place_model.dart';
 import '../screen/screen_login.dart';
 
 class APIService {
@@ -37,9 +40,6 @@ class APIService {
       //   {"id": 1, "lon": 126.965539, "lat": 37.544808},
       //   {"id": 2, "lon": 126.964842, "lat": 37.545658}]''';
 
-
-      //return MarkerInfo.fromJson(json.decode(response.body));
-      //return MarkerInfo.fromJson(json.decode(testData));
       final items = json.decode(response.body).cast<Map<String, dynamic>>();
       List<MarkerInfo> infos = items.map<MarkerInfo>((json) {
         return MarkerInfo.fromJson(json);
@@ -55,7 +55,7 @@ class APIService {
   Future<PlaceInfo> fetchPlaceInfo(double lat, double long, List<int> placeId) async {
     print("fetchPlaceInfo***********************************************");
     var postUri = Uri.parse('http://34.28.16.229:8080/api/v1/places/search');
-    Map<String, dynamic> body = {"latitude": lat, "longitude": long,'exclusions': placeId};
+    Map<String, dynamic> body = {"latitude": lat, "longitude": long, 'exclusions': placeId};
 
     print(body.toString());
 
@@ -173,7 +173,6 @@ class APIService {
           picture: data["picture"].toString(),
           hashtags1:data["hashtags"][0],
           hashtags2:data["hashtags"][1]
-
       );
 
       test.add(data["place_name"]);
@@ -182,6 +181,72 @@ class APIService {
     } catch(e){
       print(e);
       rethrow;
+    }
+  }
+
+  Future <List<MarketModel>> getAPI_market() async {
+    http.Response response;
+
+    var url = Uri.parse('http://34.28.16.229:8080/api/v1/markets');
+    final user = await SharedPreferences.getInstance();
+    response = await http.get(url, headers: {
+      'X-Auth-Token': user.getString('token') ?? [].toString()
+    });
+
+    if (response.statusCode == 200) {
+      final items = json.decode(utf8.decode(response.bodyBytes)).cast<Map<String, dynamic>>();
+      List<MarketModel> markets = items.map<MarketModel>((json) {
+        return MarketModel.fromJson(json);
+      }).toList();
+
+      return markets;
+
+    }else {
+      print("전통시장 가져오기 실패");
+      print("res : ${response.statusCode}");
+      throw Exception('Failed to load post');
+    }
+  }
+
+  Future<List<List<PlaceModel>>> getAPI_places_top(double _lat, double _long) async {
+    http.Response response;
+    List<List<PlaceModel>> places =[];
+    List<PlaceModel> placeTopList =[];
+    List<PlaceModel> placeNearList =[];
+
+    var url =  Uri.parse('http://34.28.16.229:8080/api/v1/places/top?latitude=${_lat}&longitude=${_long}');
+
+    final user = await SharedPreferences.getInstance();
+    response = await http.get(url, headers: {
+      'X-Auth-Token': user.getString('token') ?? [].toString()
+    });
+
+    if (response.statusCode == 200) {
+      final items = json.decode(utf8.decode(response.bodyBytes));
+
+      // print("TOTAL ${items["total"]}");
+      // print("NEAR ${items["near"]}");
+
+      placeTopList = items["total"].map<MarketModel>((json) {
+        return PlaceModel.fromJson(json);
+      }).toList();
+      places.add(placeTopList);
+
+      if (items["near"] == null) {
+        placeNearList = [];
+      }else{
+        placeNearList = items["near"].map<PlaceModel>((json) {
+          return PlaceModel.fromJson(json);
+        }).toList();
+      }
+      places.add(placeNearList);
+
+      return places;
+
+    }else {
+      print("TOP5 장소 가져오기 실패");
+      print("res : ${response.statusCode}");
+      throw Exception('Failed to load post');
     }
   }
 }

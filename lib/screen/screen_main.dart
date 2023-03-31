@@ -55,11 +55,18 @@ class _MyappState extends State<ScreenMain>{
     BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings))
   ];
   late TabController controller;
+
   @override
-  Widget build(BuildContext context){
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     requestLocationPermission();
     requestCameraPermission();
-    
+  }
+
+  @override
+  Widget build(BuildContext context){
+
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(items: items),
         tabBuilder: (context, index) {

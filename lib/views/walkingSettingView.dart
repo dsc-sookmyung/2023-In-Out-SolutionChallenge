@@ -65,8 +65,6 @@ class _WalkingSettingView extends State<WalkingSettingView> {
     addMarkers();
     getCurrentLocation();
     zoom = sliderVals[sliderContoller.sliderValue];
-
-
   }
 
   @override
@@ -75,9 +73,9 @@ class _WalkingSettingView extends State<WalkingSettingView> {
     super.setState(fn);
   }
 
-  addPlaceMarkers() {
-    APIService().fetchMarkers().then((val){
-      //print("Marker info ${val[0]}");
+  addPlaceMarkers() async {
+    APIService().fetchMarkers().then((val) {
+      print("Marker info ${val.length}");
       val.forEach((element) {
         markers.add(//repopulate markers
             Marker(
@@ -97,6 +95,7 @@ class _WalkingSettingView extends State<WalkingSettingView> {
     });
 
     setState(() { });
+
   }
 
   addMarkers() async {
@@ -106,10 +105,6 @@ class _WalkingSettingView extends State<WalkingSettingView> {
             markerId: MarkerId("current_user_position"),
             position: LatLng(lat, long), //move to new location
             icon: BitmapDescriptor.defaultMarker));
-
-    setState(() {
-      //refresh UI
-    });
   }
 
   mapReDraw() async {
@@ -280,7 +275,7 @@ class _WalkingSettingView extends State<WalkingSettingView> {
                                         color: greyScale4),
                                   ),
                                   onTap: () => Navigator.pushNamed(
-                                      context, '/warking/warking'),
+                                      context, '/walking/walking'),
                                 ),
                               )
                             ],

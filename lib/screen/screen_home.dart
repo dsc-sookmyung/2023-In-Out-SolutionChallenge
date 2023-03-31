@@ -6,6 +6,7 @@ import 'package:largo/providers/detail_provider.dart';
 import 'package:largo/screen/screen_detail.dart';
 import 'package:largo/screen/screen_mypage.dart';
 import 'package:largo/screen/screen_search.dart';
+import 'package:largo/service/APIService.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
@@ -37,26 +38,27 @@ class _HomeScreenState extends State<ScreenHome> {
   int termIndex  = 0;
   double _long =0;
   double _lat =0;
-
-
   List data = [];
   int _currentIndex=0;
   int _currentIndex2=0;
+  bool isFirstMarket = false;
+  bool isFirstPlace = false;
 
   List<String> Banners = [
     'assets/images/Banner1.png',
     'assets/images/Banner2.png',
     'assets/images/Banner3.png',
     'assets/images/Banner4.png'];
-  List<dynamic> Markets =[];
+
+  List<MarketModel> Markets =[];
   List cardList=[
     Market1(),
     Market2(),
     Market3(),
     Market4()
   ];
-  late Future futurePlace;
-  late Future futureMarket;
+  late List<MarketModel> futureMarket;
+  late List<List<PlaceModel>> futurePlace;
 
   String nullPic (String uri){
     if (uri == "null"){
@@ -66,108 +68,68 @@ class _HomeScreenState extends State<ScreenHome> {
     }
   }
 
-  Future <void> getPostion() async{
+  getPostion() async{
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     _lat = position.latitude;
     _long = position.longitude;
-    logger.d('lat;;;;;;;;;;;;;;;;;;;', _lat);
-    logger.d('long;;;;;;;;;;;;;;;;;;', _long);
 
+    logger.d('GET LOCATION  : ${_lat} ${_long}');
   }
 
-  Future <List<dynamic>> getAPI_places_top() async {
-    http.Response response;
-    List<dynamic> places =[];
-    List<PlaceModel> placeTopList =[];
-    List<PlaceModel> placeNearList =[];
+  Future deley5min() async {
+    await Future.delayed(Duration(seconds: 20));
+  }
 
-    PlaceModel termPlaceModel;
-    var data;
-    var url =  Uri.parse('http://34.28.16.229:8080/api/v1/places/top?latitude=${_lat}&longitude=${_long}');
-    //print('lat :${_lat} long:${_long}');
-    final user = await SharedPreferences.getInstance();
-    response = await http.get(url,headers: {
-      // 임시, 로컬 저장소로 바꿔줘야 함.
-      'X-Auth-Token': user.getString('token')??[].toString()
+  Future<List<MarketModel>> _getMarkets() async {
+    print("GET MARKET INFO status : ${isFirstMarket}");
+    if (isFirstMarket) {
+      await Future.delayed(Duration(minutes: 5)).then((value) {
+        print("GET MARKET INFO CALL - AWAIT");
+        futureMarket = APIService().getAPI_market() as List<MarketModel>;
+      });
+    }else {
+      print("GET MARKET INFO CALL - no AWAIT");
+      futureMarket = await APIService().getAPI_market();
+    }
+
+    logger.d("MARKET INFO - ${futureMarket[0].toString()}");
+    setState(() {
+      isFirstMarket = true;
     });
 
-
-    try{
-      data = await json.decode(utf8.decode(response.bodyBytes));
-      // 전 지역 top5의 장소를 리스트에 저장하기 (place_model 형태)
-
-      for(int i = 0 ; i< data["total"].length ; i++){
-        termPlaceModel = PlaceModel(
-            place_id: data["total"][i]["place_id"],
-            place_name: data["total"][i]["place_name"].toString(),
-            picture: data["total"][i]["picture"].toString(),
-            hashtags: data["total"][i]["hashtags"],
-            address: data["total"][i]["address"]);
-        placeTopList.add(termPlaceModel);
-      }
-      if(data["near"] == null){
-        // near관련 ui 안 보이게 처리할 것.
-
-      }else{
-        for(int i = 0 ; i< data["near"].length ; i++){
-          termPlaceModel = PlaceModel(
-              place_id: data["near"][i]["place_id"],
-              place_name: data["near"][i]["place_name"].toString(),
-              picture: data["near"][i]["picture"].toString(),
-              hashtags: data["near"][i]["hashtags"],
-              address: data["near"][i]["address"]);
-          placeNearList.add(termPlaceModel);
-        }
-      }
-      places.add(placeTopList);
-      places.add(placeNearList);
-    } catch(e){
-      print(e);
-      rethrow;
-    }
-    return places;
-
+    return futureMarket;
   }
 
-  Future <List<dynamic>> getAPI_market() async {
-    http.Response response;
-    List<dynamic> MarketList = [];
-    MarketModel termMarketModel;
-    var data;
-    var url = Uri.parse('http://34.28.16.229:8080/api/v1/markets');
-    final user = await SharedPreferences.getInstance();
-    response = await http.get(url, headers: {
-      // 임시, 로컬 저장소로 바꿔줘야 함.
-      'X-Auth-Token': user.getString('token') ?? [].toString()
+  Future<List<List<PlaceModel>>> _getPlace() async {
+    print("GET PLACE INFO status : ${isFirstPlace}");
+
+    if (isFirstPlace) {
+      await Future.delayed(Duration(minutes: 5)).then((value) {
+        print("GET PLACE INFO CALL - AWAIT");
+        futurePlace = APIService().getAPI_places_top(_lat, _long) as List<List<PlaceModel>>;
+      });
+    }else {
+      print("GET PLACE INFO CALL - no AWAIT");
+      futurePlace = await APIService().getAPI_places_top(_lat, _long);
+      print(futurePlace);
+    }
+
+    logger.d("PLACE INFO - ${futurePlace[0].toString()} ${futurePlace[1].toString()}");
+    setState(() {
+      isFirstPlace = true;
     });
-    try {
-      data = await json.decode(utf8.decode(response.bodyBytes)) as List;
-      // 전 지역 top5의 장소를 리스트에 저장하기 (place_model 형태)
-      for (int i = 0; i < data.length; i++) {
-          termMarketModel = MarketModel(
-              market_id: data[i]["market_id"],
-              market_name: data[i]["market_name"].toString(),
-              address_name: data[i]["address_name"].toString(),
-              longitude: data[i]["longitude"],
-              latitude: data[i]["latitude"],
-              picture: data[i]["picture"].toString());
-          MarketList.add(termMarketModel);
-      }
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-    Markets = MarketList;
 
-    return MarketList;
+    return futurePlace;
   }
+
   @override
   void initState() {
     super.initState();
-    getPostion().then((value) => futurePlace = getAPI_places_top());
-    futureMarket = getAPI_market();
+    getPostion();
+    isFirstMarket = false;
+    isFirstPlace = false;
   }
 
   @override
@@ -256,8 +218,6 @@ class _HomeScreenState extends State<ScreenHome> {
                                         fit : BoxFit.fitWidth
                                     ),
                                   ),
-
-
                               ),
                               ),
                             );
@@ -281,13 +241,13 @@ class _HomeScreenState extends State<ScreenHome> {
                   ),
 //전지역
                   Container(
-                      child: FutureBuilder<List<dynamic>>(
-                      future: getAPI_places_top(), // a previously-obtained Future<String> or null
-                      builder: (BuildContext context, AsyncSnapshot <List<dynamic>>snapshot) {
-
+                      child: FutureBuilder(
+                      future: _getPlace(), // a previously-obtained Future<String> or null
+                      builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           Text("${snapshot.error}");
                         }else if (snapshot.hasData) {
+                          print(snapshot.data?[0]);
                           // 주변 지역이 서비스 지역을 벗어난 경우 (전지역만)
                           if(snapshot.data![1].length == 0){
                             return Column(
@@ -387,21 +347,11 @@ class _HomeScreenState extends State<ScreenHome> {
                                                           ],
                                                         )
                                                     ),
-
-
-
                                                   ]
                                               ),
-
-
-
-
-
                                             ),
                                           );
-
                                         }),
-
                                   ),
                                 ),
                               ],
@@ -646,7 +596,6 @@ class _HomeScreenState extends State<ScreenHome> {
                   ),
 
 
-
                   Text("우리 동네 전통 시장",
                       style: TextStyle(
                           color : Color(0xff645F5A),
@@ -665,11 +614,12 @@ class _HomeScreenState extends State<ScreenHome> {
                       textAlign: TextAlign.center),
 
 // 전통시장 컨텐츠
-
+/*
                   Container(
-                    child: FutureBuilder<List<dynamic>>(
-                      future: getAPI_market(), // a previously-obtained Future<String> or null
-                      builder: (BuildContext context, AsyncSnapshot <List<dynamic>>snapshot) {
+                    child: FutureBuilder(
+                      future: _getMarkets(), // a previously-obtained Future<String> or null
+                      builder: (context, snapshot) {
+
                         if (snapshot.hasError) {
                           Text("${snapshot.error}");
                         }else if (snapshot.hasData) {
@@ -690,7 +640,7 @@ class _HomeScreenState extends State<ScreenHome> {
                                     });
                                   },
                                 ),
-                                items: Markets.map((card){
+                                items: snapshot.data?.map((card){
                                   return Builder(
                                       builder:(BuildContext context){
                                         return Container(
@@ -705,7 +655,7 @@ class _HomeScreenState extends State<ScreenHome> {
                                                 //color : Colors.red,
                                                 borderRadius: BorderRadius.circular(13),
                                                 image: DecorationImage(
-                                                    image: NetworkImage(nullPic(Markets[_currentIndex].picture.toString())),
+                                                    image: NetworkImage(nullPic(snapshot.data![_currentIndex].picture.toString())),
                                                     fit : BoxFit.fitWidth
                                                 ),
 
@@ -729,32 +679,21 @@ class _HomeScreenState extends State<ScreenHome> {
                                                         mainAxisAlignment: MainAxisAlignment.end,
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          Text(Markets[_currentIndex].market_name.toString(),
+                                                          Text(snapshot.data![_currentIndex].market_name.toString(),
                                                               style: TextStyle(
                                                                   color : Colors.white,
                                                                   letterSpacing:-0.5,
                                                                   fontSize: 20.0,
                                                                   fontWeight: FontWeight.w500),
                                                               textAlign: TextAlign.start),
-                                                          // Text('주민 추천 ${_currentIndex +1}위',
-                                                          //     style: TextStyle(
-                                                          //         color : Colors.white,
-                                                          //         letterSpacing: -0.5,
-                                                          //         fontSize: 12.0,
-                                                          //         fontWeight: FontWeight.w400),
-                                                          //     textAlign: TextAlign.start),
-                                                          Text(Markets[_currentIndex].address_name.toString(),
+                                                          Text(snapshot.data![_currentIndex].address_name.toString(),
                                                               style: TextStyle(
                                                                   color : Colors.white,
                                                                   letterSpacing: -0.5,
                                                                   fontSize: 12.0,
                                                                   fontWeight: FontWeight.w400),
                                                               textAlign: TextAlign.start),
-                                                        ],
-
-
-                                                      )
-                                                  )
+                                                        ],))
                                                 ],
                                               )
 
@@ -766,7 +705,7 @@ class _HomeScreenState extends State<ScreenHome> {
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: map<Widget>(Markets, (index, url) {
+                                children: map<Widget>(snapshot.data!, (index, url) {
                                   return Container(
                                     width: 8.0,
                                     height: 8.0,
@@ -780,14 +719,14 @@ class _HomeScreenState extends State<ScreenHome> {
                               ),
                             ],
                           );
-
-
                         }
                         return CircularProgressIndicator();
                       },
                     )
 
                   ),
+
+ */
                 ],
               ),
             ],

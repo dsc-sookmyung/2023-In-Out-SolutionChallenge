@@ -40,28 +40,56 @@ class WalkingDoneView extends StatefulWidget {
 
 class _WalkingDoneView extends State<WalkingDoneView> {
 
+  var check_image = 0;
+  var check_map = false;
+  var everythingIsOk = false;
+  var isUploaded = false;
+
   @override
   Widget build(BuildContext context) {
-    final args =
-    ModalRoute.of(context)!.settings.arguments as WalkingDoneViewArguments;
+
+    late final args = ModalRoute.of(context)!.settings.arguments as WalkingDoneViewArguments;
     String mapImageUrl = "";
     List<String> userImageUrl = [];
 
-    print("Final Data : ${args.map_image}");
+    void isValidCheck(){
+      Future.delayed(Duration(seconds: 5), () {
+        print("upload check! ${args.place_img!.length} ${check_image} ${check_map}");
+        if (check_map && (check_image == args.place_img!.length)) {
+          print("upload done");
+          print(mapImageUrl);
+          print(userImageUrl);
+          everythingIsOk = true;
+        } else {
+          print("upload fail ${check_image}");
+        }
+      });
+    }
 
     void uploadImage() {
-      APIService().uploadImage("test_map.jpg", args.map_image!).then((value) => {
-        mapImageUrl = value
-      });
-
-      for(int i = 0; i < args.place_img!.length; i++) {
-        APIService().uploadImage("test_map.jpg", args.place_img![i]).then((value) => {
-          mapImageUrl = value
+      if(!check_map) {
+        APIService().uploadImage("test_map.jpg", args.map_image!).then((value) {
+          mapImageUrl = value;
+          check_map = true;
         });
       }
+      if(check_image == 0){
+        for (int i = 0; i < args.place_img!.length; i++) {
+          APIService().uploadImage("test_place.jpg", args.place_img![i]).then((value) {
+            userImageUrl.add(value);
+            check_image = check_image +1;
+          });
+        }
+      }
 
-      print("upload done");
+      isValidCheck();
     }
+
+    if(!isUploaded) {
+      uploadImage();
+      isUploaded = true;
+    }
+
 
     return SafeArea(
         minimum: EdgeInsets.only(top: 40),
@@ -112,7 +140,7 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                                           Row(
                                             children: [
                                               Text(
-                                                args!.total_distance.toStringAsFixed(3),
+                                                args!.total_distance.toStringAsFixed(2),
                                                 style: TextStyle(
                                                   color: highlightColor2,
                                                   letterSpacing: 0.5,
@@ -196,15 +224,22 @@ class _WalkingDoneView extends State<WalkingDoneView> {
                         width: 350,
                         child: CustomButton(
                           GestureDetector(
-                            child: Text("공유 하기",
+                            child: Text("저장",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: greyScale4),),
                             onTap: () {
                               print("공유 하기");
-                              uploadImage();
-                              Future.delayed(Duration(seconds: 2), () {
-                                APIService().uploadRunData(args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
+                              if (everythingIsOk) {
+                                print(mapImageUrl);
+                                print(userImageUrl);
+                                Future.delayed(Duration(seconds: 2), () {
+                                  APIService().uploadRunData(
+                                      args.point_list, args.total_time, args.total_distance, mapImageUrl, userImageUrl);
+                                });
                                 Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-                              });
+                              } else {
+                                isValidCheck();
+                                print("Everything ${everythingIsOk}");
+                              }
                             }
                           ),
                         ),

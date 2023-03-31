@@ -33,7 +33,6 @@ class _SearchScreenState extends State<ScreenSearch> {
   void initState() {
     super.initState();
     getJSONData();
-
   }
 
   String? selectedValue;

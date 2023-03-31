@@ -18,8 +18,8 @@ class Routes {
     '/' : (BuildContext context) => ScreenLogin(),
     '/home' : (BuildContext context) => MyHomePage(),
     '/main' : (BuildContext context) => ScreenMain(),
-    '/warking/setting' : (BuildContext context) => WalkingSettingView(),
-    '/warking/warking': (BuildContext context) => WalkingView(),
-    '/warking/warkingDone' : (BuildContext context) => WalkingDoneView(),
+    '/walking/setting' : (BuildContext context) => WalkingSettingView(),
+    '/walking/walking': (BuildContext context) => WalkingView(),
+    '/walking/walkingDone' : (BuildContext context) => WalkingDoneView(),
   };
 }
