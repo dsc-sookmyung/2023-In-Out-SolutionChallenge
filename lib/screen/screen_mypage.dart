@@ -128,16 +128,7 @@ class _MypageScreenState extends State<ScreenMypage> {
           preferredSize: Size.fromHeight(60),
           child: AppBar(
               backgroundColor: Color(0xffF5F5F5),
-              leading:  IconButton(
-                color : Color(0xff645F5A),
-                onPressed:(){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ScreenMain())
-                  );
-                },
-                icon : Icon(Icons.arrow_back_sharp),
-              ),
+
             actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -410,7 +401,7 @@ class _MypageScreenState extends State<ScreenMypage> {
                                             letterSpacing: -0.5,
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.w500),),
-                                            Text(snapshot.data![index]["total_dist"].toString(),
+                                            Text(snapshot.data![index]["total_dist"].toStringAsFixed(2),
                                             style: TextStyle(
                                             color : Colors.grey,
                                             letterSpacing: -0.5,

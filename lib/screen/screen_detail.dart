@@ -7,6 +7,7 @@ import 'package:largo/models/detail_model.dart';
 import 'package:largo/providers/detail_provider.dart';
 import 'package:largo/screen/screen_home.dart';
 import 'package:largo/screen/screen_login.dart';
+import 'package:largo/screen/screen_main.dart';
 import 'package:largo/widget/market1.dart';
 import 'package:largo/widget/market2.dart';
 import 'package:largo/widget/market3.dart';
@@ -74,10 +75,7 @@ class ScreenDetail extends StatelessWidget{
           leading:  IconButton(
             color : Color(0xff645F5A),
             onPressed:(){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ScreenHome())
-              );
+              Navigator.pop(context);
             },
             icon : Icon(Icons.arrow_back_sharp),
           ),
