@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.inandout'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.hibernate:hibernate-spatial:6.1.7.Final'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // GCP Settings
+    implementation 'org.springframework.cloud:spring-cloud-gcp-starter-storage:1.2.8.RELEASE'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
