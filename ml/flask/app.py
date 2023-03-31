@@ -5,6 +5,7 @@ import passage_retrieval_model
 
 app = Flask(__name__)
 app.register_blueprint(search)
+passage_retrieval_model.main()
 
 
 @app.route('/')
@@ -13,5 +14,4 @@ def select():
 
  
 if __name__ == "__main__":
-    print(passage_retrieval_model.main())
     app.run(debug=True)
