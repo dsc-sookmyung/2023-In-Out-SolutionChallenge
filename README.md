@@ -2,7 +2,7 @@
 
 날짜: 2023년 3월 31일
 
-![thumbnail.png](Solution%20Challenge%20%E1%84%8C%E1%85%A6%E1%84%8E%E1%85%AE%E1%86%AF%20%E1%84%86%E1%85%A1%E1%84%80%E1%85%A1%E1%86%B7(README%20md)%209cea962afb1a4f4195301ae98122c394/thumbnail.png)
+![thumbnail.png](readme/thumbnail.png)
 
 ## **2023 Solution Challenge: Largo🏃🏻‍♀️**
 
@@ -35,11 +35,11 @@ Largo addresses regional imbalances by offering a service that provides voice ex
 
 ---
 
-![Untitled](Solution%20Challenge%20%E1%84%8C%E1%85%A6%E1%84%8E%E1%85%AE%E1%86%AF%20%E1%84%86%E1%85%A1%E1%84%80%E1%85%A1%E1%86%B7(README%20md)%209cea962afb1a4f4195301ae98122c394/Untitled.png)
+![Untitled](readmeUntitled.png)
 
-![Untitled](Solution%20Challenge%20%E1%84%8C%E1%85%A6%E1%84%8E%E1%85%AE%E1%86%AF%20%E1%84%86%E1%85%A1%E1%84%80%E1%85%A1%E1%86%B7(README%20md)%209cea962afb1a4f4195301ae98122c394/Untitled%201.png)
+![Untitled](readme/Untitled%201.png)
 
-![Untitled](Solution%20Challenge%20%E1%84%8C%E1%85%A6%E1%84%8E%E1%85%AE%E1%86%AF%20%E1%84%86%E1%85%A1%E1%84%80%E1%85%A1%E1%86%B7(README%20md)%209cea962afb1a4f4195301ae98122c394/Untitled%202.png)
+![Untitled](readme/Untitled%202.png)
 
 We chose the four SDGs because it aligns with our goal to reduce economic disparities between regions, protect local culture and heritage, and promote local destinations and culture.
 
@@ -55,7 +55,7 @@ Finally, Target 8.9 aligns with our goal of promoting sustainable tourism that c
 
 ---
 
-![썸네일.png](Solution%20Challenge%20%E1%84%8C%E1%85%A6%E1%84%8E%E1%85%AE%E1%86%AF%20%E1%84%86%E1%85%A1%E1%84%80%E1%85%A1%E1%86%B7(README%20md)%209cea962afb1a4f4195301ae98122c394/%25EC%258D%25B8%25EB%2584%25A4%25EC%259D%25BC.png)
+![썸네일.png](readme/%25EC%258D%25B8%25EB%2584%25A4%25EC%259D%25BC.png)
 
 ### **💻 Demo**
 
