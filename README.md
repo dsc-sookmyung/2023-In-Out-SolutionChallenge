@@ -57,15 +57,23 @@ Finally, Target 8.9 aligns with our goal of promoting sustainable tourism that c
 ---
 
 ![아키텍처.png](readme/architecture.png)
-
+</br></br>
 ### **💻 Demo**
+
+
+---
 
 <a href="https://youtu.be/0yQ2yNrbR3g">
 <img src="readme/thumbnail.png" width="100%" height="100%"/>
 </a>
 
+</br></br>
 ### **📸 Team Members**
 | name | [Yun Yibin](https://github.com/dbsdlqls) | [Song Jibin](https://github.com/jibin86) | [Park Kuenyoung](https://github.com/Park-kxng) | [Hwang Yejin](https://github.com/cherrrity) |
 | --- | --- | --- | --- | --- |
 | Role | Back-end | ML, Back-end | Front-end | Front-end |
-| profile | ![](https://avatars.githubusercontent.com/u/49243877?s=64&v=4) | ![](https://avatars.githubusercontent.com/u/89712324?s=64&v=4) |![](https://avatars.githubusercontent.com/u/114843604?s=64&v=4)  |![](https://avatars.githubusercontent.com/u/47818004?s=64&v=4)  |
+| profile | <img src="https://avatars.githubusercontent.com/u/49243877?s=64&v=4" width="100px" height="100px"/> | <img src="https://avatars.githubusercontent.com/u/89712324?s=64&v=4" width="100px" height="100px"/> |<img src="https://avatars.githubusercontent.com/u/114843604?s=64&v=4" width="100px" height="100px"/>  |<img src="https://avatars.githubusercontent.com/u/47818004?s=64&v=4" width="100px" height="100px"/> |
+
+
+
+
